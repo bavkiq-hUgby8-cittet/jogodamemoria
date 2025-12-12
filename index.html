@@ -1974,13 +1974,25 @@
       `).join('');
     }
 
-    function mostrarUltimaJogada(ultima) {
+    async function mostrarUltimaJogada(ultima) {
       const container = document.getElementById('ultima-jogada');
       
-      container.className = `ultima-jogada ${ultima.tipo}`;
-      container.innerHTML = `
-        ${ultima.jogador} ${ultima.tipo === 'acerto' ? '✅ Acertou! +1 par' : '❌ Errou!'}
-      `;
+      // Buscar nome do jogador
+      let nomeJogador = 'Jogador';
+      try {
+        const jogadorSnap = await database.ref('jogadores/' + ultima.jogador).once('value');
+        const jogador = jogadorSnap.val();
+        if (jogador) {
+          nomeJogador = jogador.nome;
+        }
+      } catch (e) {
+        console.error('Erro ao buscar jogador:', e);
+      }
+      
+      container.className = 'ultima-jogada ' + ultima.tipo;
+      container.innerHTML = ultima.tipo === 'acerto' 
+        ? '✅ ' + nomeJogador + ' acertou! +1 par'
+        : '❌ ' + nomeJogador + ' errou!';
       
       // Animação nas cartas
       if (ultima.posicoes && ultima.posicoes.length === 2) {
