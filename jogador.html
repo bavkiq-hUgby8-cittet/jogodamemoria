@@ -47,7 +47,6 @@
       min-height: -webkit-fill-available;
     }
 
-    /* Background animado */
     body::before {
       content: '';
       position: fixed;
@@ -62,7 +61,6 @@
       z-index: -1;
     }
 
-    /* Container */
     .container {
       height: 100vh;
       height: -webkit-fill-available;
@@ -71,7 +69,6 @@
       overflow: hidden;
     }
 
-    /* Telas */
     .tela {
       display: none;
       flex-direction: column;
@@ -89,7 +86,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Header compacto */
     .header {
       background: linear-gradient(135deg, var(--roxo) 0%, var(--rosa) 100%);
       padding: 15px 20px;
@@ -100,33 +96,25 @@
     .header-title {
       font-family: 'Pacifico', cursive;
       font-size: 1.5rem;
-      color: white;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 5px;
     }
 
     .header-subtitle {
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.8);
-      margin-top: 5px;
+      font-size: 0.9rem;
+      opacity: 0.9;
     }
 
-    /* Conteúdo */
     .content {
       flex: 1;
-      overflow-y: auto;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
+      overflow-y: auto;
     }
-
-    /* ================================ */
-    /* TELA DE CADASTRO */
-    /* ================================ */
 
     .cadastro-form {
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 20px;
+      height: 100%;
     }
 
     .form-group {
@@ -138,34 +126,28 @@
     .form-label {
       font-weight: 600;
       font-size: 1.1rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     .form-input {
-      width: 100%;
-      padding: 16px 20px;
-      border-radius: 16px;
-      border: 2px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
+      padding: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
       color: white;
       font-family: 'Poppins', sans-serif;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
+      font-size: 1rem;
     }
 
     .form-input:focus {
       outline: none;
       border-color: var(--roxo);
-      background: rgba(102, 126, 234, 0.1);
+      background: rgba(255,255,255,0.15);
     }
 
     .form-input::placeholder {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.5);
     }
 
-    /* Upload de Foto */
     .foto-upload {
       display: flex;
       flex-direction: column;
@@ -174,16 +156,15 @@
     }
 
     .foto-preview {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      border: 4px solid var(--roxo);
-      overflow: hidden;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.1);
+      border: 3px dashed rgba(255,255,255,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+      overflow: hidden;
     }
 
     .foto-preview img {
@@ -193,7 +174,8 @@
     }
 
     .foto-preview .placeholder {
-      font-size: 4rem;
+      font-size: 3rem;
+      opacity: 0.5;
     }
 
     .foto-btns {
@@ -221,7 +203,6 @@
       display: none;
     }
 
-    /* Info Badge */
     .info-badge {
       background: rgba(255,255,255,0.1);
       padding: 15px 20px;
@@ -234,7 +215,6 @@
       color: var(--verde);
     }
 
-    /* Botão Principal */
     .btn-primary {
       width: 100%;
       padding: 18px;
@@ -262,10 +242,7 @@
       transform: none;
     }
 
-    /* ================================ */
-    /* TELA DE AGUARDANDO */
-    /* ================================ */
-
+    /* AGUARDANDO */
     .aguardando-container {
       flex: 1;
       display: flex;
@@ -349,8 +326,8 @@
     }
 
     .info-value {
+      font-size: 1.3rem;
       font-weight: 700;
-      font-size: 1.2rem;
     }
 
     .info-label {
@@ -358,67 +335,59 @@
       color: var(--text-muted);
     }
 
-    /* ================================ */
-    /* TELA NÃO É SUA VEZ */
-    /* ================================ */
-
+    /* VEZ OUTRO */
     .vez-outro-container {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
       padding: 20px;
+      gap: 20px;
     }
 
     .vez-titulo {
-      font-family: 'Pacifico', cursive;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--text-muted);
-      margin-bottom: 20px;
     }
 
     .vez-jogador-card {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(240, 147, 251, 0.2));
-      border: 3px solid var(--roxo);
-      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+      border: 2px solid var(--roxo);
+      border-radius: 20px;
       padding: 30px;
       text-align: center;
-      width: 100%;
-      max-width: 300px;
       animation: pulsar 2s ease-in-out infinite;
     }
 
     @keyframes pulsar {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
-      50% { box-shadow: 0 0 30px 10px rgba(102, 126, 234, 0.2); }
+      0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
     }
 
     .vez-foto-grande {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       object-fit: cover;
-      border: 4px solid var(--rosa);
+      border: 4px solid var(--amarelo);
       margin-bottom: 15px;
-      box-shadow: 0 6px 25px rgba(240, 147, 251, 0.4);
     }
 
     .vez-nome-grande {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 15px;
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
     }
 
     .vez-timer-grande {
       font-size: 3rem;
       font-weight: 800;
-      background: linear-gradient(135deg, var(--laranja), var(--vermelho));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--amarelo);
     }
 
     .vez-timer-grande.baixo {
+      color: var(--vermelho);
       animation: timerBaixo 0.5s ease infinite;
     }
 
@@ -427,82 +396,74 @@
       50% { transform: scale(1.1); }
     }
 
-    /* Placar Compacto */
     .placar-compacto {
       width: 100%;
-      margin-top: 30px;
+      max-width: 300px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 15px;
     }
 
     .placar-titulo {
-      font-family: 'Pacifico', cursive;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      text-align: center;
+      font-size: 1rem;
+      margin-bottom: 10px;
     }
 
     .placar-lista {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .placar-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
+      gap: 10px;
+      padding: 8px 12px;
       background: rgba(255,255,255,0.05);
-      border-radius: 12px;
+      border-radius: 10px;
     }
 
     .placar-item.eu {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(240, 147, 251, 0.2));
-      border: 2px solid var(--roxo);
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+      border: 1px solid var(--roxo);
     }
 
     .placar-pos {
       font-weight: 700;
-      font-size: 1.2rem;
-      width: 35px;
+      min-width: 30px;
     }
 
-    .placar-item:nth-child(1) .placar-pos { color: var(--amarelo); }
-    .placar-item:nth-child(2) .placar-pos { color: #c0c0c0; }
-    .placar-item:nth-child(3) .placar-pos { color: #cd7f32; }
-
     .placar-foto {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 50%;
       object-fit: cover;
     }
 
     .placar-info {
       flex: 1;
+      text-align: left;
     }
 
     .placar-nome {
       font-weight: 600;
-    }
-
-    .placar-estrelas {
-      color: var(--amarelo);
       font-size: 0.9rem;
     }
 
-    .aguarde-texto {
-      text-align: center;
-      margin-top: 30px;
-      color: var(--text-muted);
-      font-size: 1.1rem;
+    .placar-estrelas {
+      font-size: 0.8rem;
+      color: var(--amarelo);
     }
 
-    /* ================================ */
-    /* TELA SUA VEZ - JOGANDO */
-    /* ================================ */
+    .aguarde-texto {
+      color: var(--text-muted);
+      font-style: italic;
+    }
 
+    /* JOGANDO */
     .jogo-header {
-      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      background: linear-gradient(135deg, var(--roxo) 0%, var(--rosa) 100%);
       padding: 15px 20px;
       display: flex;
       justify-content: space-between;
@@ -511,12 +472,11 @@
     }
 
     .jogo-sua-vez {
-      font-family: 'Pacifico', cursive;
-      font-size: 1.3rem;
-      animation: pulseText 1s ease infinite;
+      font-weight: 700;
+      animation: pulsarTexto 1s ease-in-out infinite;
     }
 
-    @keyframes pulseText {
+    @keyframes pulsarTexto {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
@@ -543,7 +503,6 @@
       font-weight: 600;
     }
 
-    /* Tabuleiro do Jogador */
     .tabuleiro-container {
       flex: 1;
       display: flex;
@@ -558,6 +517,7 @@
       gap: 8px;
       align-content: center;
       justify-content: center;
+      width: 100%;
     }
 
     .tabuleiro.facil {
@@ -578,7 +538,6 @@
       margin: 0 auto;
     }
 
-    /* Cartas */
     .carta {
       aspect-ratio: 3/4;
       cursor: pointer;
@@ -644,15 +603,8 @@
     }
 
     .carta.encontrada {
-      animation: cartaEncontrada 0.5s ease forwards;
-    }
-
-    @keyframes cartaEncontrada {
-      to {
-        opacity: 0;
-        transform: scale(0.8);
-        pointer-events: none;
-      }
+      visibility: hidden;
+      pointer-events: none;
     }
 
     .carta.acertou .carta-inner {
@@ -675,30 +627,25 @@
       75% { transform: rotateY(180deg) translateX(5px); }
     }
 
-    /* Info de cartas */
     .cartas-info {
       text-align: center;
       padding: 15px;
       background: rgba(255,255,255,0.05);
       border-radius: 12px;
       margin-top: 15px;
-      flex-shrink: 0;
     }
 
     .cartas-viradas {
-      font-size: 1.1rem;
+      font-weight: 600;
       margin-bottom: 5px;
     }
 
     .cartas-dica {
-      font-size: 0.9rem;
       color: var(--text-muted);
+      font-size: 0.9rem;
     }
 
-    /* ================================ */
-    /* FEEDBACKS */
-    /* ================================ */
-
+    /* FEEDBACK */
     .feedback-overlay {
       position: fixed;
       top: 0;
@@ -751,10 +698,7 @@
       font-size: 1.2rem;
     }
 
-    /* ================================ */
-    /* TELA FIM DE JOGO */
-    /* ================================ */
-
+    /* FIM DE JOGO */
     .fim-container {
       flex: 1;
       display: flex;
@@ -851,55 +795,21 @@
 
     .ranking-box-pares {
       font-weight: 700;
-      color: var(--verde);
+      color: var(--amarelo);
     }
 
     .btn-jogar-novamente {
-      width: 100%;
-      max-width: 300px;
-      padding: 18px;
-      border: none;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      padding: 15px 40px;
+      border: 2px solid var(--roxo);
+      border-radius: 25px;
+      background: transparent;
       color: white;
       font-family: 'Poppins', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 25px rgba(67, 233, 123, 0.4);
     }
 
-    /* ================================ */
-    /* CONFETES */
-    /* ================================ */
-
-    .confetti-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 9999;
-      overflow: hidden;
-    }
-
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      top: -10px;
-      animation: confettiFall 3s ease-out forwards;
-    }
-
-    @keyframes confettiFall {
-      to {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
-    }
-
-    /* Erro de partida */
+    /* ERRO */
     .erro-container {
       flex: 1;
       display: flex;
@@ -908,22 +818,20 @@
       justify-content: center;
       text-align: center;
       padding: 40px;
+      gap: 20px;
     }
 
     .erro-icon {
       font-size: 5rem;
-      margin-bottom: 20px;
     }
 
     .erro-titulo {
       font-family: 'Pacifico', cursive;
       font-size: 1.8rem;
-      margin-bottom: 15px;
     }
 
     .erro-texto {
       color: var(--text-muted);
-      margin-bottom: 30px;
     }
 
     .btn-voltar {
@@ -935,6 +843,44 @@
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
       cursor: pointer;
+    }
+
+    /* CONFETTI */
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      animation: confettiFall 3s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* DEBUG */
+    .debug-info {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px;
+      font-size: 10px;
+      border-radius: 5px;
+      z-index: 9999;
+      display: none;
     }
   </style>
 </head>
@@ -965,14 +911,14 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">📷 Sua Foto</label>
+            <label class="form-label">📷 Sua Foto (opcional)</label>
             <div class="foto-upload">
               <div class="foto-preview" id="foto-preview">
                 <span class="placeholder">👤</span>
               </div>
               <div class="foto-btns">
-                <button class="btn-foto" onclick="document.getElementById('input-camera').click()">📸 Tirar</button>
-                <button class="btn-foto" onclick="document.getElementById('input-galeria').click()">🖼️ Galeria</button>
+                <button type="button" class="btn-foto" id="btn-camera">📸 Tirar</button>
+                <button type="button" class="btn-foto" id="btn-galeria">🖼️ Galeria</button>
               </div>
               <input type="file" id="input-camera" accept="image/*" capture="user">
               <input type="file" id="input-galeria" accept="image/*">
@@ -983,7 +929,7 @@
             ℹ️ Carregando vagas...
           </div>
 
-          <button class="btn-primary" id="btn-entrar" onclick="entrarNoJogo()" disabled>
+          <button class="btn-primary" id="btn-entrar" disabled>
             🎮 ENTRAR NO JOGO
           </button>
         </div>
@@ -1074,6 +1020,8 @@
     </div>
   </div>
 
+  <div class="debug-info" id="debug-info"></div>
+
   <script>
     // ==========================================
     // CONFIGURAÇÃO FIREBASE
@@ -1109,46 +1057,59 @@
     // INICIALIZAÇÃO
     // ==========================================
     async function init() {
+      console.log('Iniciando...');
+      
       // Pegar ID da partida da URL
       const params = new URLSearchParams(window.location.search);
       partidaId = params.get('partida');
+      
+      console.log('Partida ID:', partidaId);
       
       if (!partidaId) {
         mostrarTela('tela-erro');
         return;
       }
       
-      // Verificar se partida existe
-      const partidaSnap = await database.ref(`partidas/${partidaId}`).once('value');
-      const partida = partidaSnap.val();
-      
-      if (!partida || !partida.ativa) {
-        mostrarTela('tela-erro');
-        return;
-      }
-      
-      partidaAtual = partida;
-      
-      // Verificar se já está cadastrado (localStorage)
-      meuJogadorId = localStorage.getItem(`jogador_${partidaId}`);
-      
-      if (meuJogadorId) {
-        // Verificar se ainda existe no Firebase
-        const jogadorSnap = await database.ref(`jogadores/${meuJogadorId}`).once('value');
-        if (jogadorSnap.val() && jogadorSnap.val().ativo) {
-          // Já cadastrado, ir para aguardando ou jogo
-          iniciarListeners();
+      try {
+        // Verificar se partida existe
+        const partidaSnap = await database.ref('partidas/' + partidaId).once('value');
+        const partida = partidaSnap.val();
+        
+        console.log('Partida:', partida);
+        
+        if (!partida || !partida.ativa) {
+          mostrarTela('tela-erro');
           return;
-        } else {
-          localStorage.removeItem(`jogador_${partidaId}`);
-          meuJogadorId = null;
         }
+        
+        partidaAtual = partida;
+        
+        // Verificar se já está cadastrado (localStorage)
+        meuJogadorId = localStorage.getItem('jogador_' + partidaId);
+        
+        if (meuJogadorId) {
+          // Verificar se ainda existe no Firebase
+          const jogadorSnap = await database.ref('jogadores/' + meuJogadorId).once('value');
+          if (jogadorSnap.val() && jogadorSnap.val().ativo) {
+            // Já cadastrado, ir para aguardando ou jogo
+            console.log('Jogador já cadastrado:', meuJogadorId);
+            iniciarListeners();
+            return;
+          } else {
+            localStorage.removeItem('jogador_' + partidaId);
+            meuJogadorId = null;
+          }
+        }
+        
+        // Mostrar tela de cadastro
+        document.getElementById('partida-nome').textContent = partida.nome;
+        carregarVagas();
+        mostrarTela('tela-cadastro');
+        
+      } catch (error) {
+        console.error('Erro na inicialização:', error);
+        mostrarTela('tela-erro');
       }
-      
-      // Mostrar tela de cadastro
-      document.getElementById('partida-nome').textContent = partida.nome;
-      carregarVagas();
-      mostrarTela('tela-cadastro');
     }
 
     // ==========================================
@@ -1159,19 +1120,23 @@
       const jogadores = jogadoresSnap.val();
       const count = jogadores ? Object.values(jogadores).filter(j => j.ativo).length : 0;
       
-      document.getElementById('vagas-info').innerHTML = `
-        ℹ️ <strong>${count}</strong> de 6 vagas ocupadas
-      `;
+      document.getElementById('vagas-info').innerHTML = 'ℹ️ <strong>' + count + '</strong> de 6 vagas ocupadas';
       
       if (count >= 6) {
         document.getElementById('btn-entrar').disabled = true;
-        document.getElementById('vagas-info').innerHTML = `
-          ⚠️ Partida lotada! Todas as 6 vagas estão ocupadas.
-        `;
+        document.getElementById('vagas-info').innerHTML = '⚠️ Partida lotada! Todas as 6 vagas estão ocupadas.';
       }
     }
 
-    // Upload de foto
+    // Upload de foto - eventos
+    document.getElementById('btn-camera').addEventListener('click', function() {
+      document.getElementById('input-camera').click();
+    });
+    
+    document.getElementById('btn-galeria').addEventListener('click', function() {
+      document.getElementById('input-galeria').click();
+    });
+    
     document.getElementById('input-camera').addEventListener('change', handleFotoUpload);
     document.getElementById('input-galeria').addEventListener('change', handleFotoUpload);
 
@@ -1179,34 +1144,42 @@
       const file = e.target.files[0];
       if (!file) return;
       
+      console.log('Arquivo selecionado:', file.name);
+      
       // Preview
       const preview = document.getElementById('foto-preview');
-      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Sua foto">`;
+      const imgUrl = URL.createObjectURL(file);
+      preview.innerHTML = '<img src="' + imgUrl + '" alt="Sua foto">';
       
       // Upload
       try {
         const resized = await resizeImage(file, 400, 400);
         const timestamp = Date.now();
         const random = Math.random().toString(36).substr(2, 9);
-        const path = `jogadores/${timestamp}_${random}.jpg`;
+        const path = 'jogadores/' + timestamp + '_' + random + '.jpg';
+        
+        console.log('Fazendo upload para:', path);
         
         const storageRef = storage.ref(path);
         await storageRef.put(resized);
         minhaFotoUrl = await storageRef.getDownloadURL();
         
+        console.log('Upload concluído:', minhaFotoUrl);
+        
         verificarFormulario();
       } catch (error) {
         console.error('Erro no upload:', error);
-        alert('Erro ao fazer upload da foto. Tente novamente.');
+        alert('Erro ao fazer upload da foto. Tente novamente. Erro: ' + error.message);
+        preview.innerHTML = '<span class="placeholder">👤</span>';
       }
     }
 
     function resizeImage(file, maxWidth, maxHeight) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = function(e) {
           const img = new Image();
-          img.onload = () => {
+          img.onload = function() {
             const canvas = document.createElement('canvas');
             let width = img.width;
             let height = img.height;
@@ -1228,62 +1201,96 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            canvas.toBlob(resolve, 'image/jpeg', 0.8);
+            canvas.toBlob(function(blob) {
+              resolve(blob);
+            }, 'image/jpeg', 0.8);
           };
+          img.onerror = reject;
           img.src = e.target.result;
         };
+        reader.onerror = reject;
         reader.readAsDataURL(file);
       });
     }
 
-    // Verificar nome
+    // Validação do nome
     document.getElementById('input-nome').addEventListener('input', verificarFormulario);
 
     function verificarFormulario() {
       const nome = document.getElementById('input-nome').value.trim();
+      // Foto agora é opcional
       document.getElementById('btn-entrar').disabled = nome.length < 2;
     }
 
+    // Entrar no jogo
+    document.getElementById('btn-entrar').addEventListener('click', entrarNoJogo);
+
     async function entrarNoJogo() {
       const nome = document.getElementById('input-nome').value.trim();
+      if (nome.length < 2) return;
       
-      if (nome.length < 2) {
-        alert('Digite seu nome (mínimo 2 caracteres)');
-        return;
+      const btn = document.getElementById('btn-entrar');
+      btn.disabled = true;
+      btn.textContent = '⏳ Entrando...';
+      
+      try {
+        // Verificar vagas novamente
+        const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).once('value');
+        const jogadores = jogadoresSnap.val();
+        const jogadoresAtivos = jogadores ? Object.values(jogadores).filter(j => j.ativo) : [];
+        
+        if (jogadoresAtivos.length >= 6) {
+          alert('Partida lotada! Todas as vagas foram preenchidas.');
+          btn.disabled = false;
+          btn.textContent = '🎮 ENTRAR NO JOGO';
+          return;
+        }
+        
+        // Criar jogador
+        const novoJogadorRef = database.ref('jogadores').push();
+        meuJogadorId = novoJogadorRef.key;
+        
+        await novoJogadorRef.set({
+          partidaId: partidaId,
+          nome: nome,
+          foto: minhaFotoUrl || null,
+          pares: 0,
+          ordem: jogadoresAtivos.length,
+          ativo: true
+        });
+        
+        // Salvar no localStorage
+        localStorage.setItem('jogador_' + partidaId, meuJogadorId);
+        
+        console.log('Jogador criado:', meuJogadorId);
+        
+        // Iniciar listeners
+        iniciarListeners();
+        
+      } catch (error) {
+        console.error('Erro ao entrar:', error);
+        alert('Erro ao entrar no jogo. Tente novamente.');
+        btn.disabled = false;
+        btn.textContent = '🎮 ENTRAR NO JOGO';
       }
-      
-      // Criar jogador
-      meuJogadorId = database.ref('jogadores').push().key;
-      
-      await database.ref(`jogadores/${meuJogadorId}`).set({
-        partidaId: partidaId,
-        nome: nome,
-        foto: minhaFotoUrl || null,
-        pares: 0,
-        ordem: 0,
-        ativo: true,
-        entradaEm: Date.now()
-      });
-      
-      // Salvar no localStorage
-      localStorage.setItem(`jogador_${partidaId}`, meuJogadorId);
-      
-      // Iniciar listeners
-      iniciarListeners();
     }
 
     // ==========================================
     // LISTENERS DO JOGO
     // ==========================================
     function iniciarListeners() {
+      console.log('Iniciando listeners...');
+      
       // Limpar listeners anteriores
-      unsubscribers.forEach(unsub => unsub());
+      unsubscribers.forEach(function(unsub) { unsub(); });
       unsubscribers = [];
       
       // Listener da partida
-      const partidaRef = database.ref(`partidas/${partidaId}`);
-      partidaRef.on('value', (snap) => {
+      const partidaRef = database.ref('partidas/' + partidaId);
+      partidaRef.on('value', function(snap) {
         const partida = snap.val();
+        console.log('Partida atualizada:', partida);
+        
         if (!partida) {
           mostrarTela('tela-erro');
           return;
@@ -1291,7 +1298,8 @@
         
         partidaAtual = partida;
         
-        document.getElementById('partida-nome-2').textContent = partida.nome;
+        const nomeEl = document.getElementById('partida-nome-2');
+        if (nomeEl) nomeEl.textContent = partida.nome;
         
         if (partida.finalizada) {
           mostrarFimDeJogo();
@@ -1302,28 +1310,36 @@
           atualizarInfoPartida();
         }
       });
-      unsubscribers.push(() => partidaRef.off());
+      unsubscribers.push(function() { partidaRef.off(); });
       
       // Listener dos jogadores
       const jogadoresRef = database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId);
-      jogadoresRef.on('value', (snap) => {
+      jogadoresRef.on('value', function(snap) {
         jogadoresAtuais = snap.val() || {};
+        console.log('Jogadores atualizados:', Object.keys(jogadoresAtuais).length);
         atualizarJogadoresProntos();
         atualizarPlacar();
       });
-      unsubscribers.push(() => jogadoresRef.off());
+      unsubscribers.push(function() { jogadoresRef.off(); });
       
       // Listener do tabuleiro
-      const tabuleiroRef = database.ref(`tabuleiro/${partidaId}`);
-      tabuleiroRef.on('value', (snap) => {
+      const tabuleiroRef = database.ref('tabuleiro/' + partidaId);
+      tabuleiroRef.on('value', function(snap) {
         tabuleiroAtual = snap.val();
+        console.log('Tabuleiro atualizado:', tabuleiroAtual ? 'sim' : 'não');
+        
+        // Re-renderizar se estiver na tela de jogo
+        if (partidaAtual && partidaAtual.jogando && partidaAtual.vezDoJogador === meuJogadorId) {
+          renderizarMeuTabuleiro();
+        }
       });
-      unsubscribers.push(() => tabuleiroRef.off());
+      unsubscribers.push(function() { tabuleiroRef.off(); });
       
       // Listener da jogada atual
-      const jogadaRef = database.ref(`jogada_atual/${partidaId}`);
-      jogadaRef.on('value', (snap) => {
+      const jogadaRef = database.ref('jogada_atual/' + partidaId);
+      jogadaRef.on('value', function(snap) {
         const jogada = snap.val();
+        console.log('Jogada atualizada:', jogada);
         if (jogada) {
           atualizarTimerDisplay(jogada);
           if (partidaAtual && partidaAtual.jogando) {
@@ -1331,51 +1347,60 @@
           }
         }
       });
-      unsubscribers.push(() => jogadaRef.off());
+      unsubscribers.push(function() { jogadaRef.off(); });
     }
 
     function atualizarInfoPartida() {
       const info = document.getElementById('partida-info-box');
-      if (!partidaAtual) return;
+      if (!partidaAtual || !info) return;
       
-      info.innerHTML = `
-        <div class="info-item">
-          <div class="info-icon">🎴</div>
-          <div class="info-value">${partidaAtual.totalPares}</div>
-          <div class="info-label">pares</div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon">⏱️</div>
-          <div class="info-value">${partidaAtual.tempoPorJogada}s</div>
-          <div class="info-label">por jogada</div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon">📊</div>
-          <div class="info-value">${partidaAtual.nivel}</div>
-          <div class="info-label">nível</div>
-        </div>
-      `;
+      info.innerHTML = '\
+        <div class="info-item">\
+          <div class="info-icon">🎴</div>\
+          <div class="info-value">' + partidaAtual.totalPares + '</div>\
+          <div class="info-label">pares</div>\
+        </div>\
+        <div class="info-item">\
+          <div class="info-icon">⏱️</div>\
+          <div class="info-value">' + partidaAtual.tempoPorJogada + 's</div>\
+          <div class="info-label">por jogada</div>\
+        </div>\
+        <div class="info-item">\
+          <div class="info-icon">📊</div>\
+          <div class="info-value">' + partidaAtual.nivel + '</div>\
+          <div class="info-label">nível</div>\
+        </div>';
     }
 
     function atualizarJogadoresProntos() {
       const container = document.getElementById('jogadores-prontos');
       if (!container) return;
       
-      const jogadoresArray = Object.entries(jogadoresAtuais)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }));
+      const jogadoresArray = [];
+      for (var id in jogadoresAtuais) {
+        if (jogadoresAtuais[id].ativo) {
+          jogadoresArray.push({ id: id, nome: jogadoresAtuais[id].nome, foto: jogadoresAtuais[id].foto });
+        }
+      }
       
-      container.innerHTML = jogadoresArray.map(j => `
-        <div class="jogador-item">
-          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="jogador-foto-mini" alt="${j.nome}">
-          <span class="jogador-nome">${j.nome}${j.id === meuJogadorId ? ' (você)' : ''}</span>
-          <span class="jogador-check">✅</span>
-        </div>
-      `).join('');
+      var html = '';
+      for (var i = 0; i < jogadoresArray.length; i++) {
+        var j = jogadoresArray[i];
+        var fotoSrc = j.foto || gerarAvatarPadrao(j.nome);
+        var isMe = j.id === meuJogadorId ? ' (você)' : '';
+        html += '<div class="jogador-item">' +
+          '<img src="' + fotoSrc + '" class="jogador-foto-mini" alt="' + j.nome + '">' +
+          '<span class="jogador-nome">' + j.nome + isMe + '</span>' +
+          '<span class="jogador-check">✅</span>' +
+          '</div>';
+      }
+      container.innerHTML = html;
     }
 
     function verificarVez() {
       if (!partidaAtual || !partidaAtual.jogando) return;
+      
+      console.log('Verificando vez - meuId:', meuJogadorId, 'vezDo:', partidaAtual.vezDoJogador);
       
       if (partidaAtual.vezDoJogador === meuJogadorId) {
         mostrarTela('tela-jogando');
@@ -1387,7 +1412,7 @@
       }
     }
 
-    async function atualizarVezOutro() {
+    function atualizarVezOutro() {
       const jogadorId = partidaAtual.vezDoJogador;
       if (!jogadorId) return;
       
@@ -1395,64 +1420,90 @@
       if (!jogador) return;
       
       const container = document.getElementById('vez-jogador-card');
-      container.innerHTML = `
-        <img src="${jogador.foto || gerarAvatarPadrao(jogador.nome)}" class="vez-foto-grande" alt="${jogador.nome}">
-        <div class="vez-nome-grande">${jogador.nome}</div>
-        <div class="vez-timer-grande" id="vez-timer-outro">--</div>
-      `;
+      var fotoSrc = jogador.foto || gerarAvatarPadrao(jogador.nome);
+      container.innerHTML = '\
+        <img src="' + fotoSrc + '" class="vez-foto-grande" alt="' + jogador.nome + '">\
+        <div class="vez-nome-grande">' + jogador.nome + '</div>\
+        <div class="vez-timer-grande" id="vez-timer-outro">--</div>';
     }
 
     function atualizarPlacar() {
       const container = document.getElementById('placar-lista');
       if (!container) return;
       
-      const jogadoresArray = Object.entries(jogadoresAtuais)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+      const jogadoresArray = [];
+      for (var id in jogadoresAtuais) {
+        if (jogadoresAtuais[id].ativo) {
+          jogadoresArray.push({ 
+            id: id, 
+            nome: jogadoresAtuais[id].nome, 
+            foto: jogadoresAtuais[id].foto, 
+            pares: jogadoresAtuais[id].pares || 0 
+          });
+        }
+      }
       
-      container.innerHTML = jogadoresArray.map((j, idx) => `
-        <div class="placar-item ${j.id === meuJogadorId ? 'eu' : ''}">
-          <div class="placar-pos">${idx + 1}º</div>
-          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="placar-foto" alt="${j.nome}">
-          <div class="placar-info">
-            <div class="placar-nome">${j.id === meuJogadorId ? 'Você' : j.nome}</div>
-            <div class="placar-estrelas">${'⭐'.repeat(j.pares || 0) || '-'}</div>
-          </div>
-        </div>
-      `).join('');
+      jogadoresArray.sort(function(a, b) { return b.pares - a.pares; });
+      
+      var html = '';
+      for (var i = 0; i < jogadoresArray.length; i++) {
+        var j = jogadoresArray[i];
+        var fotoSrc = j.foto || gerarAvatarPadrao(j.nome);
+        var isMe = j.id === meuJogadorId ? ' eu' : '';
+        var nomeTxt = j.id === meuJogadorId ? 'Você' : j.nome;
+        var estrelas = '';
+        for (var s = 0; s < j.pares; s++) estrelas += '⭐';
+        if (!estrelas) estrelas = '-';
+        
+        html += '<div class="placar-item' + isMe + '">' +
+          '<div class="placar-pos">' + (i + 1) + 'º</div>' +
+          '<img src="' + fotoSrc + '" class="placar-foto" alt="' + j.nome + '">' +
+          '<div class="placar-info">' +
+            '<div class="placar-nome">' + nomeTxt + '</div>' +
+            '<div class="placar-estrelas">' + estrelas + '</div>' +
+          '</div>' +
+        '</div>';
+      }
+      container.innerHTML = html;
     }
 
     function atualizarTimerDisplay(jogada) {
       if (timerInterval) clearInterval(timerInterval);
       
-      const tempoPorJogada = partidaAtual?.tempoPorJogada || 10;
+      const tempoPorJogada = partidaAtual ? partidaAtual.tempoPorJogada : 10;
       
-      const calcularTempo = () => {
+      function calcularTempo() {
         const agora = Date.now();
         const passado = Math.floor((agora - jogada.inicioJogada) / 1000);
         const restante = Math.max(0, tempoPorJogada - passado);
         
-        // Atualizar displays
         const timerJogo = document.getElementById('jogo-timer');
         const timerOutro = document.getElementById('vez-timer-outro');
         
         if (timerJogo) {
-          timerJogo.textContent = `${restante}s`;
-          timerJogo.classList.toggle('baixo', restante <= 3);
+          timerJogo.textContent = restante + 's';
+          if (restante <= 3) {
+            timerJogo.classList.add('baixo');
+          } else {
+            timerJogo.classList.remove('baixo');
+          }
         }
         
         if (timerOutro) {
-          timerOutro.textContent = `${restante}s`;
-          timerOutro.classList.toggle('baixo', restante <= 3);
+          timerOutro.textContent = restante + 's';
+          if (restante <= 3) {
+            timerOutro.classList.add('baixo');
+          } else {
+            timerOutro.classList.remove('baixo');
+          }
         }
         
         return restante;
-      };
+      }
       
       calcularTempo();
       
-      timerInterval = setInterval(() => {
+      timerInterval = setInterval(function() {
         const restante = calcularTempo();
         if (restante <= 0) {
           clearInterval(timerInterval);
@@ -1464,45 +1515,68 @@
     // TABULEIRO E JOGADAS
     // ==========================================
     async function renderizarMeuTabuleiro() {
-      if (!tabuleiroAtual || !partidaAtual) return;
+      console.log('Renderizando tabuleiro...');
+      
+      if (!tabuleiroAtual || !partidaAtual) {
+        console.log('Sem tabuleiro ou partida');
+        return;
+      }
+      
+      if (!tabuleiroAtual.cartas || !tabuleiroAtual.posicoes) {
+        console.log('Tabuleiro incompleto:', tabuleiroAtual);
+        return;
+      }
       
       const container = document.getElementById('tabuleiro');
-      container.className = `tabuleiro ${partidaAtual.nivel}`;
+      container.className = 'tabuleiro ' + partidaAtual.nivel;
       container.innerHTML = '';
       
       // Buscar jogada atual
-      const jogadaSnap = await database.ref(`jogada_atual/${partidaId}`).once('value');
+      const jogadaSnap = await database.ref('jogada_atual/' + partidaId).once('value');
       const jogada = jogadaSnap.val();
-      const cartasViradas = jogada?.cartasViradas || [];
+      const cartasViradas = jogada && jogada.cartasViradas ? jogada.cartasViradas : [];
       
-      tabuleiroAtual.posicoes.forEach((cartaId, idx) => {
-        const carta = tabuleiroAtual.cartas[cartaId];
-        const div = document.createElement('div');
+      console.log('Posições:', tabuleiroAtual.posicoes.length, 'Cartas viradas:', cartasViradas);
+      
+      for (var idx = 0; idx < tabuleiroAtual.posicoes.length; idx++) {
+        var cartaId = tabuleiroAtual.posicoes[idx];
+        var carta = tabuleiroAtual.cartas[cartaId];
+        
+        if (!carta) {
+          console.log('Carta não encontrada:', cartaId);
+          continue;
+        }
+        
+        var div = document.createElement('div');
         div.className = 'carta';
-        div.dataset.posicao = idx;
-        div.dataset.cartaId = cartaId;
+        div.setAttribute('data-posicao', idx);
+        div.setAttribute('data-carta-id', cartaId);
         
         if (carta.encontrada) {
           div.classList.add('encontrada');
-        } else if (cartasViradas.includes(idx)) {
+        } else if (cartasViradas.indexOf(idx) !== -1) {
           div.classList.add('virada');
         }
         
-        div.innerHTML = `
-          <div class="carta-inner">
-            <div class="carta-verso"></div>
-            <div class="carta-frente">
-              <img src="${carta.fotoUrl}" alt="Carta">
-            </div>
-          </div>
-        `;
+        div.innerHTML = '\
+          <div class="carta-inner">\
+            <div class="carta-verso"></div>\
+            <div class="carta-frente">\
+              <img src="' + carta.fotoUrl + '" alt="Carta">\
+            </div>\
+          </div>';
         
-        div.addEventListener('click', () => clicarCarta(idx));
+        (function(posicao) {
+          div.addEventListener('click', function() {
+            clicarCarta(posicao);
+          });
+        })(idx);
         
         container.appendChild(div);
-      });
+      }
       
       atualizarCartasViradasDisplay(cartasViradas.length);
+      console.log('Tabuleiro renderizado com', container.children.length, 'cartas');
     }
 
     function atualizarMeusPares() {
@@ -1526,52 +1600,78 @@
     }
 
     async function clicarCarta(posicao) {
-      if (processandoJogada) return;
+      console.log('Clicou na carta:', posicao);
+      
+      if (processandoJogada) {
+        console.log('Já processando jogada');
+        return;
+      }
       
       // Verificar se é minha vez
-      if (partidaAtual.vezDoJogador !== meuJogadorId) return;
+      if (!partidaAtual || partidaAtual.vezDoJogador !== meuJogadorId) {
+        console.log('Não é minha vez');
+        return;
+      }
       
       // Buscar jogada atual
-      const jogadaSnap = await database.ref(`jogada_atual/${partidaId}`).once('value');
+      const jogadaSnap = await database.ref('jogada_atual/' + partidaId).once('value');
       const jogada = jogadaSnap.val();
       
-      if (!jogada || jogada.jogadorId !== meuJogadorId) return;
+      if (!jogada || jogada.jogadorId !== meuJogadorId) {
+        console.log('Jogada inválida');
+        return;
+      }
       
       const cartasViradas = jogada.cartasViradas || [];
       
       // Verificar se já virou 2
-      if (cartasViradas.length >= 2) return;
+      if (cartasViradas.length >= 2) {
+        console.log('Já virou 2 cartas');
+        return;
+      }
       
       // Verificar se já clicou nessa carta
-      if (cartasViradas.includes(posicao)) return;
+      if (cartasViradas.indexOf(posicao) !== -1) {
+        console.log('Carta já virada');
+        return;
+      }
       
       // Verificar se carta já foi encontrada
       const cartaId = tabuleiroAtual.posicoes[posicao];
       const carta = tabuleiroAtual.cartas[cartaId];
-      if (carta.encontrada) return;
+      
+      if (carta.encontrada) {
+        console.log('Carta já encontrada');
+        return;
+      }
       
       // Virar carta
-      const novasViradas = [...cartasViradas, posicao];
+      const novasViradas = cartasViradas.slice();
+      novasViradas.push(posicao);
       
-      await database.ref(`jogada_atual/${partidaId}/cartasViradas`).set(novasViradas);
+      await database.ref('jogada_atual/' + partidaId + '/cartasViradas').set(novasViradas);
       
       // Atualizar visual
-      const cartaEl = document.querySelector(`.carta[data-posicao="${posicao}"]`);
+      const cartaEl = document.querySelector('.carta[data-posicao="' + posicao + '"]');
       if (cartaEl) {
         cartaEl.classList.add('virada');
       }
       
       atualizarCartasViradasDisplay(novasViradas.length);
       
-      // Se virou 2, verificar par
+      // Se virou 2 cartas, verificar match
       if (novasViradas.length === 2) {
         processandoJogada = true;
-        setTimeout(() => verificarPar(novasViradas), 1000);
+        
+        setTimeout(function() {
+          verificarMatch(novasViradas);
+        }, 800);
       }
     }
 
-    async function verificarPar(posicoes) {
-      const [pos1, pos2] = posicoes;
+    async function verificarMatch(posicoes) {
+      const pos1 = posicoes[0];
+      const pos2 = posicoes[1];
       
       const carta1Id = tabuleiroAtual.posicoes[pos1];
       const carta2Id = tabuleiroAtual.posicoes[pos2];
@@ -1579,146 +1679,180 @@
       const carta1 = tabuleiroAtual.cartas[carta1Id];
       const carta2 = tabuleiroAtual.cartas[carta2Id];
       
-      if (carta1.fotoUrl === carta2.fotoUrl) {
-        // ACERTOU!
-        await acertouPar(carta1Id, carta2Id, posicoes);
-      } else {
-        // ERROU!
-        await errouPar(posicoes);
-      }
+      console.log('Verificando match:', carta1.fotoUrl, 'vs', carta2.fotoUrl);
       
-      processandoJogada = false;
-    }
-
-    async function acertouPar(carta1Id, carta2Id, posicoes) {
-      // Feedback visual
-      posicoes.forEach(pos => {
-        const el = document.querySelector(`.carta[data-posicao="${pos}"]`);
-        if (el) {
-          el.classList.add('acertou');
-        }
-      });
+      const acertou = carta1.fotoUrl === carta2.fotoUrl;
       
-      // Vibrar
-      if (navigator.vibrate) {
-        navigator.vibrate([100, 50, 100]);
-      }
-      
-      // Marcar cartas como encontradas no Firebase
-      await database.ref(`tabuleiro/${partidaId}/cartas/${carta1Id}/encontrada`).set(true);
-      await database.ref(`tabuleiro/${partidaId}/cartas/${carta2Id}/encontrada`).set(true);
-      
-      // Incrementar pontuação
-      await database.ref(`jogadores/${meuJogadorId}/pares`).transaction(pares => (pares || 0) + 1);
-      
-      // Incrementar pares encontrados e jogadas
-      await database.ref(`partidas/${partidaId}`).transaction(partida => {
-        if (partida) {
-          partida.paresEncontrados = (partida.paresEncontrados || 0) + 1;
-          partida.totalJogadas = (partida.totalJogadas || 0) + 1;
-        }
-        return partida;
-      });
-      
-      // Registrar última jogada
-      const meuJogador = jogadoresAtuais[meuJogadorId];
-      await database.ref(`ultima_jogada/${partidaId}`).set({
-        jogador: meuJogador?.nome || 'Jogador',
-        tipo: 'acerto',
-        posicoes: posicoes,
-        timestamp: Date.now()
-      });
-      
-      // Mostrar feedback
-      mostrarFeedback('acerto', '✅ ACERTOU!', '+1 par! Continue jogando!');
-      
-      // Verificar fim do jogo
-      const partidaSnap = await database.ref(`partidas/${partidaId}`).once('value');
-      const partida = partidaSnap.val();
-      
-      if (partida.paresEncontrados >= partida.totalPares) {
-        // Fim do jogo!
-        await finalizarJogo();
-      } else {
-        // Jogar novamente
-        await database.ref(`jogada_atual/${partidaId}`).set({
-          jogadorId: meuJogadorId,
-          cartasViradas: [],
-          inicioJogada: Date.now()
+      if (acertou) {
+        // Marcar como encontradas
+        await database.ref('tabuleiro/' + partidaId + '/cartas/' + carta1Id + '/encontrada').set(true);
+        await database.ref('tabuleiro/' + partidaId + '/cartas/' + carta2Id + '/encontrada').set(true);
+        
+        // Incrementar pares do jogador
+        const meuJogador = jogadoresAtuais[meuJogadorId];
+        const novosPares = (meuJogador.pares || 0) + 1;
+        await database.ref('jogadores/' + meuJogadorId + '/pares').set(novosPares);
+        
+        // Incrementar pares encontrados na partida
+        const novosParesPartida = (partidaAtual.paresEncontrados || 0) + 1;
+        await database.ref('partidas/' + partidaId + '/paresEncontrados').set(novosParesPartida);
+        
+        // Registrar última jogada
+        await database.ref('ultima_jogada/' + partidaId).set({
+          jogador: meuJogadorId,
+          tipo: 'acerto',
+          posicoes: posicoes,
+          timestamp: Date.now()
         });
         
-        setTimeout(() => {
+        // Feedback
+        var el1 = document.querySelector('.carta[data-posicao="' + pos1 + '"]');
+        var el2 = document.querySelector('.carta[data-posicao="' + pos2 + '"]');
+        if (el1) el1.classList.add('acertou');
+        if (el2) el2.classList.add('acertou');
+        
+        mostrarFeedback('acerto');
+        vibrar([100, 50, 100]);
+        criarConfetti();
+        
+        // Verificar se acabou
+        if (novosParesPartida >= partidaAtual.totalPares) {
+          await database.ref('partidas/' + partidaId + '/finalizada').set(true);
+          await database.ref('partidas/' + partidaId + '/jogando').set(false);
+        } else {
+          // Limpar cartas viradas e continuar jogando
+          await database.ref('jogada_atual/' + partidaId + '/cartasViradas').set([]);
+          await database.ref('jogada_atual/' + partidaId + '/inicioJogada').set(Date.now());
+        }
+        
+        setTimeout(function() {
+          processandoJogada = false;
           renderizarMeuTabuleiro();
-          atualizarMeusPares();
+        }, 1500);
+        
+      } else {
+        // Errou
+        var el1 = document.querySelector('.carta[data-posicao="' + pos1 + '"]');
+        var el2 = document.querySelector('.carta[data-posicao="' + pos2 + '"]');
+        if (el1) el1.classList.add('errou');
+        if (el2) el2.classList.add('errou');
+        
+        // Registrar última jogada
+        await database.ref('ultima_jogada/' + partidaId).set({
+          jogador: meuJogadorId,
+          tipo: 'erro',
+          posicoes: posicoes,
+          timestamp: Date.now()
+        });
+        
+        mostrarFeedback('erro');
+        vibrar([200]);
+        
+        // Passar para próximo jogador
+        setTimeout(async function() {
+          await passarVez();
+          processandoJogada = false;
         }, 1500);
       }
     }
 
-    async function errouPar(posicoes) {
-      // Feedback visual
-      posicoes.forEach(pos => {
-        const el = document.querySelector(`.carta[data-posicao="${pos}"]`);
-        if (el) {
-          el.classList.add('errou');
+    async function passarVez() {
+      // Encontrar próximo jogador
+      const jogadoresArray = [];
+      for (var id in jogadoresAtuais) {
+        if (jogadoresAtuais[id].ativo) {
+          jogadoresArray.push({ id: id, ordem: jogadoresAtuais[id].ordem });
         }
-      });
+      }
+      jogadoresArray.sort(function(a, b) { return a.ordem - b.ordem; });
       
-      // Vibrar
-      if (navigator.vibrate) {
-        navigator.vibrate(200);
+      // Encontrar índice atual
+      var idxAtual = -1;
+      for (var i = 0; i < jogadoresArray.length; i++) {
+        if (jogadoresArray[i].id === meuJogadorId) {
+          idxAtual = i;
+          break;
+        }
       }
       
-      // Incrementar jogadas
-      await database.ref(`partidas/${partidaId}/totalJogadas`).transaction(j => (j || 0) + 1);
+      var proximoIdx = (idxAtual + 1) % jogadoresArray.length;
+      var proximoJogador = jogadoresArray[proximoIdx].id;
       
-      // Registrar última jogada
-      const meuJogador = jogadoresAtuais[meuJogadorId];
-      await database.ref(`ultima_jogada/${partidaId}`).set({
-        jogador: meuJogador?.nome || 'Jogador',
-        tipo: 'erro',
-        posicoes: posicoes,
-        timestamp: Date.now()
-      });
+      // Atualizar partida
+      await database.ref('partidas/' + partidaId + '/vezDoJogador').set(proximoJogador);
       
-      // Mostrar feedback
-      mostrarFeedback('erro', '❌ Não foi dessa vez!', 'Tente memorizar as posições!');
-      
-      // Próximo jogador
-      setTimeout(proximoJogador, 1500);
-    }
-
-    async function proximoJogador() {
-      const jogadoresArray = Object.entries(jogadoresAtuais)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
-      
-      const idxAtual = jogadoresArray.findIndex(j => j.id === meuJogadorId);
-      const proximo = jogadoresArray[(idxAtual + 1) % jogadoresArray.length];
-      
-      await database.ref(`partidas/${partidaId}/vezDoJogador`).set(proximo.id);
-      
-      await database.ref(`jogada_atual/${partidaId}`).set({
-        jogadorId: proximo.id,
+      // Nova jogada
+      await database.ref('jogada_atual/' + partidaId).set({
+        jogadorId: proximoJogador,
         cartasViradas: [],
         inicioJogada: Date.now()
       });
     }
 
-    async function finalizarJogo() {
-      // Encontrar vencedor
-      const jogadoresArray = Object.entries(jogadoresAtuais)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+    // ==========================================
+    // FEEDBACK
+    // ==========================================
+    function mostrarFeedback(tipo) {
+      const overlay = document.createElement('div');
+      overlay.className = 'feedback-overlay ' + tipo;
       
-      const vencedor = jogadoresArray[0];
+      var icon, titulo, texto;
       
-      await database.ref(`partidas/${partidaId}`).update({
-        finalizada: true,
-        vencedor: vencedor.id,
-        jogando: false
-      });
+      if (tipo === 'acerto') {
+        icon = '✅';
+        titulo = 'ACERTOU!';
+        texto = '+1 par para você!';
+      } else if (tipo === 'erro') {
+        icon = '❌';
+        titulo = 'Não foi dessa vez!';
+        texto = 'Próximo jogador...';
+      } else if (tipo === 'tempo') {
+        icon = '⏰';
+        titulo = 'Tempo esgotado!';
+        texto = 'Próximo jogador...';
+      }
+      
+      overlay.innerHTML = '\
+        <div class="feedback-content">\
+          <div class="feedback-icon">' + icon + '</div>\
+          <h2 class="feedback-titulo">' + titulo + '</h2>\
+          <p class="feedback-texto">' + texto + '</p>\
+        </div>';
+      
+      document.body.appendChild(overlay);
+      
+      setTimeout(function() {
+        overlay.remove();
+      }, 1500);
+    }
+
+    function vibrar(pattern) {
+      if (navigator.vibrate) {
+        navigator.vibrate(pattern);
+      }
+    }
+
+    function criarConfetti() {
+      const container = document.createElement('div');
+      container.className = 'confetti-container';
+      
+      const cores = ['#667eea', '#f093fb', '#43e97b', '#ffd700', '#4facfe', '#f5af19'];
+      
+      for (var i = 0; i < 50; i++) {
+        var confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = cores[Math.floor(Math.random() * cores.length)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        container.appendChild(confetti);
+      }
+      
+      document.body.appendChild(container);
+      
+      setTimeout(function() {
+        container.remove();
+      }, 3500);
     }
 
     // ==========================================
@@ -1726,103 +1860,89 @@
     // ==========================================
     function mostrarFimDeJogo() {
       mostrarTela('tela-fim');
+      criarConfetti();
       
-      const jogadoresArray = Object.entries(jogadoresAtuais)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+      // Calcular ranking
+      const jogadoresArray = [];
+      for (var id in jogadoresAtuais) {
+        if (jogadoresAtuais[id].ativo) {
+          jogadoresArray.push({ 
+            id: id, 
+            nome: jogadoresAtuais[id].nome, 
+            foto: jogadoresAtuais[id].foto, 
+            pares: jogadoresAtuais[id].pares || 0 
+          });
+        }
+      }
+      jogadoresArray.sort(function(a, b) { return b.pares - a.pares; });
       
-      const minhaPosicao = jogadoresArray.findIndex(j => j.id === meuJogadorId) + 1;
-      const meuJogador = jogadoresAtuais[meuJogadorId];
+      // Encontrar minha posição
+      var minhaPosicao = 1;
+      for (var i = 0; i < jogadoresArray.length; i++) {
+        if (jogadoresArray[i].id === meuJogadorId) {
+          minhaPosicao = i + 1;
+          break;
+        }
+      }
       
-      document.getElementById('fim-posicao').textContent = `Você ficou em ${minhaPosicao}º!`;
-      document.getElementById('fim-medalha').textContent = ['🥇', '🥈', '🥉'][minhaPosicao - 1] || '🎖️';
-      document.getElementById('fim-pares').innerHTML = `Seus pares: <strong>${meuJogador?.pares || 0}</strong>`;
+      var meuJogador = jogadoresAtuais[meuJogadorId];
+      var meusPares = meuJogador ? meuJogador.pares || 0 : 0;
+      
+      // Medalha
+      var medalhas = ['🥇', '🥈', '🥉', '🎖️', '🎖️', '🎖️'];
+      
+      document.getElementById('fim-posicao').textContent = 'Você ficou em ' + minhaPosicao + 'º!';
+      document.getElementById('fim-medalha').textContent = medalhas[minhaPosicao - 1] || '🎖️';
+      document.getElementById('fim-pares').innerHTML = 'Seus pares: <strong>' + meusPares + '</strong>';
       
       // Ranking
-      const rankingContainer = document.getElementById('ranking-final');
-      rankingContainer.innerHTML = jogadoresArray.map((j, idx) => `
-        <div class="ranking-box-item ${j.id === meuJogadorId ? 'eu' : ''}">
-          <div class="ranking-box-pos">${['🥇', '🥈', '🥉'][idx] || `${idx + 1}º`}</div>
-          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-box-foto" alt="${j.nome}">
-          <div class="ranking-box-nome">${j.id === meuJogadorId ? 'Você' : j.nome}</div>
-          <div class="ranking-box-pares">${j.pares || 0}</div>
-        </div>
-      `).join('');
-      
-      // Confetes
-      mostrarConfetes();
+      var rankingHtml = '';
+      for (var i = 0; i < jogadoresArray.length; i++) {
+        var j = jogadoresArray[i];
+        var fotoSrc = j.foto || gerarAvatarPadrao(j.nome);
+        var isMe = j.id === meuJogadorId ? ' eu' : '';
+        var medalha = medalhas[i] || (i + 1) + 'º';
+        
+        rankingHtml += '<div class="ranking-box-item' + isMe + '">' +
+          '<div class="ranking-box-pos">' + medalha + '</div>' +
+          '<img src="' + fotoSrc + '" class="ranking-box-foto" alt="' + j.nome + '">' +
+          '<div class="ranking-box-nome">' + j.nome + '</div>' +
+          '<div class="ranking-box-pares">' + j.pares + ' ⭐</div>' +
+        '</div>';
+      }
+      document.getElementById('ranking-final').innerHTML = rankingHtml;
     }
 
     function aguardarNovaPartida() {
+      // Limpar jogador
+      localStorage.removeItem('jogador_' + partidaId);
+      meuJogadorId = null;
+      minhaFotoUrl = null;
+      
+      // Limpar listeners
+      unsubscribers.forEach(function(unsub) { unsub(); });
+      unsubscribers = [];
+      
+      // Voltar ao início
       mostrarTela('tela-aguardando');
-    }
-
-    // ==========================================
-    // FEEDBACK
-    // ==========================================
-    function mostrarFeedback(tipo, titulo, texto) {
-      const overlay = document.createElement('div');
-      overlay.className = `feedback-overlay ${tipo}`;
-      overlay.innerHTML = `
-        <div class="feedback-content">
-          <div class="feedback-icon">${tipo === 'acerto' ? '✅' : tipo === 'tempo' ? '⏰' : '❌'}</div>
-          <h2 class="feedback-titulo">${titulo}</h2>
-          <p class="feedback-texto">${texto}</p>
-        </div>
-      `;
-      
-      document.body.appendChild(overlay);
-      
-      if (tipo === 'acerto') {
-        mostrarConfetes();
-      }
-      
-      setTimeout(() => {
-        overlay.style.animation = 'fadeIn 0.3s ease reverse';
-        setTimeout(() => overlay.remove(), 300);
-      }, 1200);
-    }
-
-    // ==========================================
-    // CONFETES
-    // ==========================================
-    function mostrarConfetes() {
-      const container = document.createElement('div');
-      container.className = 'confetti-container';
-      document.body.appendChild(container);
-      
-      const cores = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#ffd700'];
-      
-      for (let i = 0; i < 40; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.background = cores[Math.floor(Math.random() * cores.length)];
-        piece.style.animationDelay = Math.random() * 0.5 + 's';
-        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        piece.style.width = (5 + Math.random() * 8) + 'px';
-        piece.style.height = (5 + Math.random() * 8) + 'px';
-        container.appendChild(piece);
-      }
-      
-      setTimeout(() => container.remove(), 3500);
+      init();
     }
 
     // ==========================================
     // UTILITÁRIOS
     // ==========================================
     function mostrarTela(telaId) {
-      document.querySelectorAll('.tela').forEach(tela => {
-        tela.classList.remove('ativa');
-      });
+      console.log('Mostrando tela:', telaId);
+      var telas = document.querySelectorAll('.tela');
+      for (var i = 0; i < telas.length; i++) {
+        telas[i].classList.remove('ativa');
+      }
       document.getElementById(telaId).classList.add('ativa');
     }
 
     function gerarAvatarPadrao(nome) {
-      const inicial = nome ? nome.charAt(0).toUpperCase() : '?';
-      return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23667eea"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-family="sans-serif">${inicial}</text></svg>`;
+      var inicial = nome ? nome.charAt(0).toUpperCase() : '?';
+      return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#667eea"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-family="sans-serif">' + inicial + '</text></svg>');
     }
 
     // ==========================================
