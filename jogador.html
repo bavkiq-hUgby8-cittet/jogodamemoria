@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🎴 Jogo da Memória - Jogador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --roxo: #667eea;
+      --roxo-escuro: #5a67d8;
+      --rosa: #f093fb;
+      --rosa-forte: #ec4899;
+      --azul: #4facfe;
+      --verde: #43e97b;
+      --laranja: #f5af19;
+      --amarelo: #ffd700;
+      --vermelho: #ef4444;
+      --bg-dark: #1a1a2e;
+      --bg-card: #16213e;
+      --text-light: #ffffff;
+      --text-muted: rgba(255,255,255,0.7);
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #0f0f23 100%);
+      color: var(--text-light);
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+
+    /* Background animado */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.15) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Container */
+    .container {
+      height: 100vh;
+      height: -webkit-fill-available;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Telas */
+    .tela {
+      display: none;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .tela.ativa {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header compacto */
+    .header {
+      background: linear-gradient(135deg, var(--roxo) 0%, var(--rosa) 100%);
+      padding: 15px 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.5rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-subtitle {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+      margin-top: 5px;
+    }
+
+    /* Conteúdo */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ================================ */
+    /* TELA DE CADASTRO */
+    /* ================================ */
+
+    .cadastro-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--roxo);
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Upload de Foto */
+    .foto-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .foto-preview {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid var(--roxo);
+      overflow: hidden;
+      background: rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .foto-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .foto-preview .placeholder {
+      font-size: 4rem;
+    }
+
+    .foto-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-foto {
+      padding: 12px 24px;
+      border-radius: 25px;
+      border: 2px solid var(--roxo);
+      background: transparent;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-foto:hover, .btn-foto:active {
+      background: var(--roxo);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    /* Info Badge */
+    .info-badge {
+      background: rgba(255,255,255,0.1);
+      padding: 15px 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .info-badge strong {
+      color: var(--verde);
+    }
+
+    /* Botão Principal */
+    .btn-primary {
+      width: 100%;
+      padding: 18px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 25px rgba(67, 233, 123, 0.4);
+      margin-top: auto;
+    }
+
+    .btn-primary:hover, .btn-primary:active {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 35px rgba(67, 233, 123, 0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ================================ */
+    /* TELA DE AGUARDANDO */
+    /* ================================ */
+
+    .aguardando-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 30px;
+    }
+
+    .loader {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(255,255,255,0.1);
+      border-top-color: var(--roxo);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .aguardando-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.5rem;
+    }
+
+    .aguardando-texto {
+      color: var(--text-muted);
+    }
+
+    .jogadores-prontos {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .jogador-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .jogador-foto-mini {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--verde);
+    }
+
+    .jogador-nome {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .jogador-check {
+      color: var(--verde);
+      font-size: 1.2rem;
+    }
+
+    .partida-info-box {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-icon {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .info-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ================================ */
+    /* TELA NÃO É SUA VEZ */
+    /* ================================ */
+
+    .vez-outro-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .vez-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .vez-jogador-card {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(240, 147, 251, 0.2));
+      border: 3px solid var(--roxo);
+      border-radius: 24px;
+      padding: 30px;
+      text-align: center;
+      width: 100%;
+      max-width: 300px;
+      animation: pulsar 2s ease-in-out infinite;
+    }
+
+    @keyframes pulsar {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+      50% { box-shadow: 0 0 30px 10px rgba(102, 126, 234, 0.2); }
+    }
+
+    .vez-foto-grande {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--rosa);
+      margin-bottom: 15px;
+      box-shadow: 0 6px 25px rgba(240, 147, 251, 0.4);
+    }
+
+    .vez-nome-grande {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .vez-timer-grande {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--laranja), var(--vermelho));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .vez-timer-grande.baixo {
+      animation: timerBaixo 0.5s ease infinite;
+    }
+
+    @keyframes timerBaixo {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Placar Compacto */
+    .placar-compacto {
+      width: 100%;
+      margin-top: 30px;
+    }
+
+    .placar-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .placar-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .placar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+    }
+
+    .placar-item.eu {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(240, 147, 251, 0.2));
+      border: 2px solid var(--roxo);
+    }
+
+    .placar-pos {
+      font-weight: 700;
+      font-size: 1.2rem;
+      width: 35px;
+    }
+
+    .placar-item:nth-child(1) .placar-pos { color: var(--amarelo); }
+    .placar-item:nth-child(2) .placar-pos { color: #c0c0c0; }
+    .placar-item:nth-child(3) .placar-pos { color: #cd7f32; }
+
+    .placar-foto {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .placar-info {
+      flex: 1;
+    }
+
+    .placar-nome {
+      font-weight: 600;
+    }
+
+    .placar-estrelas {
+      color: var(--amarelo);
+      font-size: 0.9rem;
+    }
+
+    .aguarde-texto {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* ================================ */
+    /* TELA SUA VEZ - JOGANDO */
+    /* ================================ */
+
+    .jogo-header {
+      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .jogo-sua-vez {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.3rem;
+      animation: pulseText 1s ease infinite;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .jogo-timer {
+      font-size: 2rem;
+      font-weight: 800;
+      background: white;
+      color: var(--vermelho);
+      padding: 5px 15px;
+      border-radius: 12px;
+    }
+
+    .jogo-timer.baixo {
+      animation: timerBaixo 0.5s ease infinite;
+      background: var(--vermelho);
+      color: white;
+    }
+
+    .jogo-pares {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+
+    /* Tabuleiro do Jogador */
+    .tabuleiro-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      overflow: hidden;
+    }
+
+    .tabuleiro {
+      flex: 1;
+      display: grid;
+      gap: 8px;
+      align-content: center;
+      justify-content: center;
+    }
+
+    .tabuleiro.facil {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .tabuleiro.medio {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 300px;
+      margin: 0 auto;
+    }
+
+    .tabuleiro.dificil {
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    /* Cartas */
+    .carta {
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      perspective: 1000px;
+      transition: transform 0.1s ease;
+    }
+
+    .carta:active {
+      transform: scale(0.95);
+    }
+
+    .carta.desabilitada {
+      pointer-events: none;
+    }
+
+    .carta-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+
+    .carta.virada .carta-inner {
+      transform: rotateY(180deg);
+    }
+
+    .carta-frente,
+    .carta-verso {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .carta-verso {
+      background: linear-gradient(135deg, var(--roxo) 0%, var(--rosa) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .carta-verso::before {
+      content: "?";
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .carta-frente {
+      transform: rotateY(180deg);
+      background: white;
+    }
+
+    .carta-frente img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .carta.encontrada {
+      animation: cartaEncontrada 0.5s ease forwards;
+    }
+
+    @keyframes cartaEncontrada {
+      to {
+        opacity: 0;
+        transform: scale(0.8);
+        pointer-events: none;
+      }
+    }
+
+    .carta.acertou .carta-inner {
+      animation: celebrar 0.6s ease;
+    }
+
+    @keyframes celebrar {
+      0%, 100% { transform: rotateY(180deg) scale(1); }
+      25% { transform: rotateY(180deg) scale(1.1) rotate(-5deg); }
+      75% { transform: rotateY(180deg) scale(1.1) rotate(5deg); }
+    }
+
+    .carta.errou .carta-inner {
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: rotateY(180deg) translateX(0); }
+      25% { transform: rotateY(180deg) translateX(-5px); }
+      75% { transform: rotateY(180deg) translateX(5px); }
+    }
+
+    /* Info de cartas */
+    .cartas-info {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-top: 15px;
+      flex-shrink: 0;
+    }
+
+    .cartas-viradas {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+
+    .cartas-dica {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* ================================ */
+    /* FEEDBACKS */
+    /* ================================ */
+
+    .feedback-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .feedback-overlay.acerto {
+      background: rgba(67, 233, 123, 0.9);
+    }
+
+    .feedback-overlay.erro {
+      background: rgba(239, 68, 68, 0.9);
+    }
+
+    .feedback-overlay.tempo {
+      background: rgba(245, 175, 25, 0.9);
+    }
+
+    .feedback-content {
+      text-align: center;
+      color: white;
+    }
+
+    .feedback-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      animation: bounceIn 0.5s ease;
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    .feedback-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .feedback-texto {
+      font-size: 1.2rem;
+    }
+
+    /* ================================ */
+    /* TELA FIM DE JOGO */
+    /* ================================ */
+
+    .fim-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .fim-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--amarelo), var(--laranja));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .fim-posicao {
+      font-size: 1.5rem;
+      margin-bottom: 5px;
+    }
+
+    .fim-medalha {
+      font-size: 5rem;
+      margin: 20px 0;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .fim-pares {
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .fim-pares strong {
+      color: var(--verde);
+    }
+
+    .ranking-box {
+      width: 100%;
+      max-width: 350px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .ranking-box-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+
+    .ranking-box-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .ranking-box-item.eu {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+      border: 2px solid var(--roxo);
+    }
+
+    .ranking-box-pos {
+      font-size: 1.5rem;
+      width: 40px;
+    }
+
+    .ranking-box-foto {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .ranking-box-nome {
+      flex: 1;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .ranking-box-pares {
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    .btn-jogar-novamente {
+      width: 100%;
+      max-width: 300px;
+      padding: 18px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(67, 233, 123, 0.4);
+    }
+
+    /* ================================ */
+    /* CONFETES */
+    /* ================================ */
+
+    .confetti-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: -10px;
+      animation: confettiFall 3s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* Erro de partida */
+    .erro-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .erro-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+    }
+
+    .erro-titulo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    .erro-texto {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .btn-voltar {
+      padding: 15px 40px;
+      border: 2px solid var(--roxo);
+      border-radius: 25px;
+      background: transparent;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- TELA 0: ERRO -->
+    <div id="tela-erro" class="tela">
+      <div class="erro-container">
+        <div class="erro-icon">😕</div>
+        <h1 class="erro-titulo">Partida não encontrada</h1>
+        <p class="erro-texto">Verifique se o QR code está correto ou peça ao operador para gerar um novo.</p>
+        <button class="btn-voltar" onclick="window.location.reload()">🔄 Tentar Novamente</button>
+      </div>
+    </div>
+
+    <!-- TELA 1: CADASTRO -->
+    <div id="tela-cadastro" class="tela">
+      <header class="header">
+        <h1 class="header-title">🎴 Jogo da Memória</h1>
+        <p class="header-subtitle" id="partida-nome">Carregando...</p>
+      </header>
+      
+      <div class="content">
+        <div class="cadastro-form">
+          <div class="form-group">
+            <label class="form-label">👤 Seu Nome</label>
+            <input type="text" class="form-input" id="input-nome" placeholder="Digite seu nome" maxlength="30">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">📷 Sua Foto</label>
+            <div class="foto-upload">
+              <div class="foto-preview" id="foto-preview">
+                <span class="placeholder">👤</span>
+              </div>
+              <div class="foto-btns">
+                <button class="btn-foto" onclick="document.getElementById('input-camera').click()">📸 Tirar</button>
+                <button class="btn-foto" onclick="document.getElementById('input-galeria').click()">🖼️ Galeria</button>
+              </div>
+              <input type="file" id="input-camera" accept="image/*" capture="user">
+              <input type="file" id="input-galeria" accept="image/*">
+            </div>
+          </div>
+
+          <div class="info-badge" id="vagas-info">
+            ℹ️ Carregando vagas...
+          </div>
+
+          <button class="btn-primary" id="btn-entrar" onclick="entrarNoJogo()" disabled>
+            🎮 ENTRAR NO JOGO
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 2: AGUARDANDO INÍCIO -->
+    <div id="tela-aguardando" class="tela">
+      <header class="header">
+        <h1 class="header-title">🎴 Jogo da Memória</h1>
+        <p class="header-subtitle" id="partida-nome-2">Carregando...</p>
+      </header>
+      
+      <div class="content">
+        <div class="aguardando-container">
+          <div class="loader"></div>
+          <h2 class="aguardando-titulo">Aguardando início...</h2>
+          <p class="aguardando-texto">O operador iniciará a partida em breve</p>
+          
+          <div class="jogadores-prontos" id="jogadores-prontos"></div>
+          
+          <div class="partida-info-box" id="partida-info-box"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 3: NÃO É SUA VEZ -->
+    <div id="tela-vez-outro" class="tela">
+      <header class="header">
+        <h1 class="header-title">🎴 Jogo da Memória</h1>
+      </header>
+      
+      <div class="content">
+        <div class="vez-outro-container">
+          <h2 class="vez-titulo">VEZ DE:</h2>
+          
+          <div class="vez-jogador-card" id="vez-jogador-card">
+            <!-- Preenchido via JS -->
+          </div>
+
+          <div class="placar-compacto">
+            <h3 class="placar-titulo">📊 Placar Atual</h3>
+            <div class="placar-lista" id="placar-lista"></div>
+          </div>
+
+          <p class="aguarde-texto">Aguarde sua vez... 🎯</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 4: SUA VEZ - JOGANDO -->
+    <div id="tela-jogando" class="tela">
+      <div class="jogo-header">
+        <span class="jogo-sua-vez">🎯 SUA VEZ!</span>
+        <span class="jogo-timer" id="jogo-timer">10s</span>
+        <span class="jogo-pares">⭐ <span id="meus-pares">0</span></span>
+      </div>
+      
+      <div class="tabuleiro-container">
+        <div class="tabuleiro" id="tabuleiro"></div>
+        
+        <div class="cartas-info">
+          <div class="cartas-viradas">Cartas viradas: <strong id="cartas-viradas-count">0</strong>/2</div>
+          <div class="cartas-dica" id="cartas-dica">Clique em 2 cartas para virar</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 5: FIM DE JOGO -->
+    <div id="tela-fim" class="tela">
+      <div class="content">
+        <div class="fim-container">
+          <h1 class="fim-titulo">🏆 FIM DE JOGO!</h1>
+          <p class="fim-posicao" id="fim-posicao">Você ficou em 1º!</p>
+          <div class="fim-medalha" id="fim-medalha">🥇</div>
+          <p class="fim-pares" id="fim-pares">Seus pares: <strong>0</strong></p>
+          
+          <div class="ranking-box">
+            <h3 class="ranking-box-titulo">📋 Ranking</h3>
+            <div id="ranking-final"></div>
+          </div>
+          
+          <button class="btn-jogar-novamente" onclick="aguardarNovaPartida()">
+            🎮 Aguardar Nova Partida
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // CONFIGURAÇÃO FIREBASE
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyCwU3iGOAk1p4AHQe3EpYrShx5zzSe4S5Q",
+      authDomain: "jogodamemoria-61432.firebaseapp.com",
+      databaseURL: "https://jogodamemoria-61432-default-rtdb.firebaseio.com",
+      projectId: "jogodamemoria-61432",
+      storageBucket: "jogodamemoria-61432.firebasestorage.app",
+      messagingSenderId: "131881486944",
+      appId: "1:131881486944:web:653271faeb8ab0f5e25105"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const storage = firebase.storage();
+
+    // ==========================================
+    // VARIÁVEIS GLOBAIS
+    // ==========================================
+    let partidaId = null;
+    let meuJogadorId = null;
+    let minhaFotoUrl = null;
+    let partidaAtual = null;
+    let tabuleiroAtual = null;
+    let jogadoresAtuais = {};
+    let unsubscribers = [];
+    let timerInterval = null;
+    let processandoJogada = false;
+
+    // ==========================================
+    // INICIALIZAÇÃO
+    // ==========================================
+    async function init() {
+      // Pegar ID da partida da URL
+      const params = new URLSearchParams(window.location.search);
+      partidaId = params.get('partida');
+      
+      if (!partidaId) {
+        mostrarTela('tela-erro');
+        return;
+      }
+      
+      // Verificar se partida existe
+      const partidaSnap = await database.ref(`partidas/${partidaId}`).once('value');
+      const partida = partidaSnap.val();
+      
+      if (!partida || !partida.ativa) {
+        mostrarTela('tela-erro');
+        return;
+      }
+      
+      partidaAtual = partida;
+      
+      // Verificar se já está cadastrado (localStorage)
+      meuJogadorId = localStorage.getItem(`jogador_${partidaId}`);
+      
+      if (meuJogadorId) {
+        // Verificar se ainda existe no Firebase
+        const jogadorSnap = await database.ref(`jogadores/${meuJogadorId}`).once('value');
+        if (jogadorSnap.val() && jogadorSnap.val().ativo) {
+          // Já cadastrado, ir para aguardando ou jogo
+          iniciarListeners();
+          return;
+        } else {
+          localStorage.removeItem(`jogador_${partidaId}`);
+          meuJogadorId = null;
+        }
+      }
+      
+      // Mostrar tela de cadastro
+      document.getElementById('partida-nome').textContent = partida.nome;
+      carregarVagas();
+      mostrarTela('tela-cadastro');
+    }
+
+    // ==========================================
+    // CADASTRO
+    // ==========================================
+    async function carregarVagas() {
+      const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).once('value');
+      const jogadores = jogadoresSnap.val();
+      const count = jogadores ? Object.values(jogadores).filter(j => j.ativo).length : 0;
+      
+      document.getElementById('vagas-info').innerHTML = `
+        ℹ️ <strong>${count}</strong> de 6 vagas ocupadas
+      `;
+      
+      if (count >= 6) {
+        document.getElementById('btn-entrar').disabled = true;
+        document.getElementById('vagas-info').innerHTML = `
+          ⚠️ Partida lotada! Todas as 6 vagas estão ocupadas.
+        `;
+      }
+    }
+
+    // Upload de foto
+    document.getElementById('input-camera').addEventListener('change', handleFotoUpload);
+    document.getElementById('input-galeria').addEventListener('change', handleFotoUpload);
+
+    async function handleFotoUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      // Preview
+      const preview = document.getElementById('foto-preview');
+      preview.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Sua foto">`;
+      
+      // Upload
+      try {
+        const resized = await resizeImage(file, 400, 400);
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substr(2, 9);
+        const path = `jogadores/${timestamp}_${random}.jpg`;
+        
+        const storageRef = storage.ref(path);
+        await storageRef.put(resized);
+        minhaFotoUrl = await storageRef.getDownloadURL();
+        
+        verificarFormulario();
+      } catch (error) {
+        console.error('Erro no upload:', error);
+        alert('Erro ao fazer upload da foto. Tente novamente.');
+      }
+    }
+
+    function resizeImage(file, maxWidth, maxHeight) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            
+            if (width > height) {
+              if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+              }
+            } else {
+              if (height > maxHeight) {
+                width = (width * maxHeight) / height;
+                height = maxHeight;
+              }
+            }
+            
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            canvas.toBlob(resolve, 'image/jpeg', 0.8);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Verificar nome
+    document.getElementById('input-nome').addEventListener('input', verificarFormulario);
+
+    function verificarFormulario() {
+      const nome = document.getElementById('input-nome').value.trim();
+      document.getElementById('btn-entrar').disabled = nome.length < 2;
+    }
+
+    async function entrarNoJogo() {
+      const nome = document.getElementById('input-nome').value.trim();
+      
+      if (nome.length < 2) {
+        alert('Digite seu nome (mínimo 2 caracteres)');
+        return;
+      }
+      
+      // Criar jogador
+      meuJogadorId = database.ref('jogadores').push().key;
+      
+      await database.ref(`jogadores/${meuJogadorId}`).set({
+        partidaId: partidaId,
+        nome: nome,
+        foto: minhaFotoUrl || null,
+        pares: 0,
+        ordem: 0,
+        ativo: true,
+        entradaEm: Date.now()
+      });
+      
+      // Salvar no localStorage
+      localStorage.setItem(`jogador_${partidaId}`, meuJogadorId);
+      
+      // Iniciar listeners
+      iniciarListeners();
+    }
+
+    // ==========================================
+    // LISTENERS DO JOGO
+    // ==========================================
+    function iniciarListeners() {
+      // Limpar listeners anteriores
+      unsubscribers.forEach(unsub => unsub());
+      unsubscribers = [];
+      
+      // Listener da partida
+      const partidaRef = database.ref(`partidas/${partidaId}`);
+      partidaRef.on('value', (snap) => {
+        const partida = snap.val();
+        if (!partida) {
+          mostrarTela('tela-erro');
+          return;
+        }
+        
+        partidaAtual = partida;
+        
+        document.getElementById('partida-nome-2').textContent = partida.nome;
+        
+        if (partida.finalizada) {
+          mostrarFimDeJogo();
+        } else if (partida.jogando) {
+          verificarVez();
+        } else {
+          mostrarTela('tela-aguardando');
+          atualizarInfoPartida();
+        }
+      });
+      unsubscribers.push(() => partidaRef.off());
+      
+      // Listener dos jogadores
+      const jogadoresRef = database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId);
+      jogadoresRef.on('value', (snap) => {
+        jogadoresAtuais = snap.val() || {};
+        atualizarJogadoresProntos();
+        atualizarPlacar();
+      });
+      unsubscribers.push(() => jogadoresRef.off());
+      
+      // Listener do tabuleiro
+      const tabuleiroRef = database.ref(`tabuleiro/${partidaId}`);
+      tabuleiroRef.on('value', (snap) => {
+        tabuleiroAtual = snap.val();
+      });
+      unsubscribers.push(() => tabuleiroRef.off());
+      
+      // Listener da jogada atual
+      const jogadaRef = database.ref(`jogada_atual/${partidaId}`);
+      jogadaRef.on('value', (snap) => {
+        const jogada = snap.val();
+        if (jogada) {
+          atualizarTimerDisplay(jogada);
+          if (partidaAtual && partidaAtual.jogando) {
+            verificarVez();
+          }
+        }
+      });
+      unsubscribers.push(() => jogadaRef.off());
+    }
+
+    function atualizarInfoPartida() {
+      const info = document.getElementById('partida-info-box');
+      if (!partidaAtual) return;
+      
+      info.innerHTML = `
+        <div class="info-item">
+          <div class="info-icon">🎴</div>
+          <div class="info-value">${partidaAtual.totalPares}</div>
+          <div class="info-label">pares</div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">⏱️</div>
+          <div class="info-value">${partidaAtual.tempoPorJogada}s</div>
+          <div class="info-label">por jogada</div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📊</div>
+          <div class="info-value">${partidaAtual.nivel}</div>
+          <div class="info-label">nível</div>
+        </div>
+      `;
+    }
+
+    function atualizarJogadoresProntos() {
+      const container = document.getElementById('jogadores-prontos');
+      if (!container) return;
+      
+      const jogadoresArray = Object.entries(jogadoresAtuais)
+        .filter(([id, j]) => j.ativo)
+        .map(([id, j]) => ({ id, ...j }));
+      
+      container.innerHTML = jogadoresArray.map(j => `
+        <div class="jogador-item">
+          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="jogador-foto-mini" alt="${j.nome}">
+          <span class="jogador-nome">${j.nome}${j.id === meuJogadorId ? ' (você)' : ''}</span>
+          <span class="jogador-check">✅</span>
+        </div>
+      `).join('');
+    }
+
+    function verificarVez() {
+      if (!partidaAtual || !partidaAtual.jogando) return;
+      
+      if (partidaAtual.vezDoJogador === meuJogadorId) {
+        mostrarTela('tela-jogando');
+        renderizarMeuTabuleiro();
+        atualizarMeusPares();
+      } else {
+        mostrarTela('tela-vez-outro');
+        atualizarVezOutro();
+      }
+    }
+
+    async function atualizarVezOutro() {
+      const jogadorId = partidaAtual.vezDoJogador;
+      if (!jogadorId) return;
+      
+      const jogador = jogadoresAtuais[jogadorId];
+      if (!jogador) return;
+      
+      const container = document.getElementById('vez-jogador-card');
+      container.innerHTML = `
+        <img src="${jogador.foto || gerarAvatarPadrao(jogador.nome)}" class="vez-foto-grande" alt="${jogador.nome}">
+        <div class="vez-nome-grande">${jogador.nome}</div>
+        <div class="vez-timer-grande" id="vez-timer-outro">--</div>
+      `;
+    }
+
+    function atualizarPlacar() {
+      const container = document.getElementById('placar-lista');
+      if (!container) return;
+      
+      const jogadoresArray = Object.entries(jogadoresAtuais)
+        .filter(([id, j]) => j.ativo)
+        .map(([id, j]) => ({ id, ...j }))
+        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+      
+      container.innerHTML = jogadoresArray.map((j, idx) => `
+        <div class="placar-item ${j.id === meuJogadorId ? 'eu' : ''}">
+          <div class="placar-pos">${idx + 1}º</div>
+          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="placar-foto" alt="${j.nome}">
+          <div class="placar-info">
+            <div class="placar-nome">${j.id === meuJogadorId ? 'Você' : j.nome}</div>
+            <div class="placar-estrelas">${'⭐'.repeat(j.pares || 0) || '-'}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function atualizarTimerDisplay(jogada) {
+      if (timerInterval) clearInterval(timerInterval);
+      
+      const tempoPorJogada = partidaAtual?.tempoPorJogada || 10;
+      
+      const calcularTempo = () => {
+        const agora = Date.now();
+        const passado = Math.floor((agora - jogada.inicioJogada) / 1000);
+        const restante = Math.max(0, tempoPorJogada - passado);
+        
+        // Atualizar displays
+        const timerJogo = document.getElementById('jogo-timer');
+        const timerOutro = document.getElementById('vez-timer-outro');
+        
+        if (timerJogo) {
+          timerJogo.textContent = `${restante}s`;
+          timerJogo.classList.toggle('baixo', restante <= 3);
+        }
+        
+        if (timerOutro) {
+          timerOutro.textContent = `${restante}s`;
+          timerOutro.classList.toggle('baixo', restante <= 3);
+        }
+        
+        return restante;
+      };
+      
+      calcularTempo();
+      
+      timerInterval = setInterval(() => {
+        const restante = calcularTempo();
+        if (restante <= 0) {
+          clearInterval(timerInterval);
+        }
+      }, 1000);
+    }
+
+    // ==========================================
+    // TABULEIRO E JOGADAS
+    // ==========================================
+    async function renderizarMeuTabuleiro() {
+      if (!tabuleiroAtual || !partidaAtual) return;
+      
+      const container = document.getElementById('tabuleiro');
+      container.className = `tabuleiro ${partidaAtual.nivel}`;
+      container.innerHTML = '';
+      
+      // Buscar jogada atual
+      const jogadaSnap = await database.ref(`jogada_atual/${partidaId}`).once('value');
+      const jogada = jogadaSnap.val();
+      const cartasViradas = jogada?.cartasViradas || [];
+      
+      tabuleiroAtual.posicoes.forEach((cartaId, idx) => {
+        const carta = tabuleiroAtual.cartas[cartaId];
+        const div = document.createElement('div');
+        div.className = 'carta';
+        div.dataset.posicao = idx;
+        div.dataset.cartaId = cartaId;
+        
+        if (carta.encontrada) {
+          div.classList.add('encontrada');
+        } else if (cartasViradas.includes(idx)) {
+          div.classList.add('virada');
+        }
+        
+        div.innerHTML = `
+          <div class="carta-inner">
+            <div class="carta-verso"></div>
+            <div class="carta-frente">
+              <img src="${carta.fotoUrl}" alt="Carta">
+            </div>
+          </div>
+        `;
+        
+        div.addEventListener('click', () => clicarCarta(idx));
+        
+        container.appendChild(div);
+      });
+      
+      atualizarCartasViradasDisplay(cartasViradas.length);
+    }
+
+    function atualizarMeusPares() {
+      const meuJogador = jogadoresAtuais[meuJogadorId];
+      if (meuJogador) {
+        document.getElementById('meus-pares').textContent = meuJogador.pares || 0;
+      }
+    }
+
+    function atualizarCartasViradasDisplay(count) {
+      document.getElementById('cartas-viradas-count').textContent = count;
+      
+      const dica = document.getElementById('cartas-dica');
+      if (count === 0) {
+        dica.textContent = 'Clique em 2 cartas para virar';
+      } else if (count === 1) {
+        dica.textContent = 'Vire mais uma carta!';
+      } else {
+        dica.textContent = 'Verificando...';
+      }
+    }
+
+    async function clicarCarta(posicao) {
+      if (processandoJogada) return;
+      
+      // Verificar se é minha vez
+      if (partidaAtual.vezDoJogador !== meuJogadorId) return;
+      
+      // Buscar jogada atual
+      const jogadaSnap = await database.ref(`jogada_atual/${partidaId}`).once('value');
+      const jogada = jogadaSnap.val();
+      
+      if (!jogada || jogada.jogadorId !== meuJogadorId) return;
+      
+      const cartasViradas = jogada.cartasViradas || [];
+      
+      // Verificar se já virou 2
+      if (cartasViradas.length >= 2) return;
+      
+      // Verificar se já clicou nessa carta
+      if (cartasViradas.includes(posicao)) return;
+      
+      // Verificar se carta já foi encontrada
+      const cartaId = tabuleiroAtual.posicoes[posicao];
+      const carta = tabuleiroAtual.cartas[cartaId];
+      if (carta.encontrada) return;
+      
+      // Virar carta
+      const novasViradas = [...cartasViradas, posicao];
+      
+      await database.ref(`jogada_atual/${partidaId}/cartasViradas`).set(novasViradas);
+      
+      // Atualizar visual
+      const cartaEl = document.querySelector(`.carta[data-posicao="${posicao}"]`);
+      if (cartaEl) {
+        cartaEl.classList.add('virada');
+      }
+      
+      atualizarCartasViradasDisplay(novasViradas.length);
+      
+      // Se virou 2, verificar par
+      if (novasViradas.length === 2) {
+        processandoJogada = true;
+        setTimeout(() => verificarPar(novasViradas), 1000);
+      }
+    }
+
+    async function verificarPar(posicoes) {
+      const [pos1, pos2] = posicoes;
+      
+      const carta1Id = tabuleiroAtual.posicoes[pos1];
+      const carta2Id = tabuleiroAtual.posicoes[pos2];
+      
+      const carta1 = tabuleiroAtual.cartas[carta1Id];
+      const carta2 = tabuleiroAtual.cartas[carta2Id];
+      
+      if (carta1.fotoUrl === carta2.fotoUrl) {
+        // ACERTOU!
+        await acertouPar(carta1Id, carta2Id, posicoes);
+      } else {
+        // ERROU!
+        await errouPar(posicoes);
+      }
+      
+      processandoJogada = false;
+    }
+
+    async function acertouPar(carta1Id, carta2Id, posicoes) {
+      // Feedback visual
+      posicoes.forEach(pos => {
+        const el = document.querySelector(`.carta[data-posicao="${pos}"]`);
+        if (el) {
+          el.classList.add('acertou');
+        }
+      });
+      
+      // Vibrar
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100]);
+      }
+      
+      // Marcar cartas como encontradas no Firebase
+      await database.ref(`tabuleiro/${partidaId}/cartas/${carta1Id}/encontrada`).set(true);
+      await database.ref(`tabuleiro/${partidaId}/cartas/${carta2Id}/encontrada`).set(true);
+      
+      // Incrementar pontuação
+      await database.ref(`jogadores/${meuJogadorId}/pares`).transaction(pares => (pares || 0) + 1);
+      
+      // Incrementar pares encontrados e jogadas
+      await database.ref(`partidas/${partidaId}`).transaction(partida => {
+        if (partida) {
+          partida.paresEncontrados = (partida.paresEncontrados || 0) + 1;
+          partida.totalJogadas = (partida.totalJogadas || 0) + 1;
+        }
+        return partida;
+      });
+      
+      // Registrar última jogada
+      const meuJogador = jogadoresAtuais[meuJogadorId];
+      await database.ref(`ultima_jogada/${partidaId}`).set({
+        jogador: meuJogador?.nome || 'Jogador',
+        tipo: 'acerto',
+        posicoes: posicoes,
+        timestamp: Date.now()
+      });
+      
+      // Mostrar feedback
+      mostrarFeedback('acerto', '✅ ACERTOU!', '+1 par! Continue jogando!');
+      
+      // Verificar fim do jogo
+      const partidaSnap = await database.ref(`partidas/${partidaId}`).once('value');
+      const partida = partidaSnap.val();
+      
+      if (partida.paresEncontrados >= partida.totalPares) {
+        // Fim do jogo!
+        await finalizarJogo();
+      } else {
+        // Jogar novamente
+        await database.ref(`jogada_atual/${partidaId}`).set({
+          jogadorId: meuJogadorId,
+          cartasViradas: [],
+          inicioJogada: Date.now()
+        });
+        
+        setTimeout(() => {
+          renderizarMeuTabuleiro();
+          atualizarMeusPares();
+        }, 1500);
+      }
+    }
+
+    async function errouPar(posicoes) {
+      // Feedback visual
+      posicoes.forEach(pos => {
+        const el = document.querySelector(`.carta[data-posicao="${pos}"]`);
+        if (el) {
+          el.classList.add('errou');
+        }
+      });
+      
+      // Vibrar
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }
+      
+      // Incrementar jogadas
+      await database.ref(`partidas/${partidaId}/totalJogadas`).transaction(j => (j || 0) + 1);
+      
+      // Registrar última jogada
+      const meuJogador = jogadoresAtuais[meuJogadorId];
+      await database.ref(`ultima_jogada/${partidaId}`).set({
+        jogador: meuJogador?.nome || 'Jogador',
+        tipo: 'erro',
+        posicoes: posicoes,
+        timestamp: Date.now()
+      });
+      
+      // Mostrar feedback
+      mostrarFeedback('erro', '❌ Não foi dessa vez!', 'Tente memorizar as posições!');
+      
+      // Próximo jogador
+      setTimeout(proximoJogador, 1500);
+    }
+
+    async function proximoJogador() {
+      const jogadoresArray = Object.entries(jogadoresAtuais)
+        .filter(([id, j]) => j.ativo)
+        .map(([id, j]) => ({ id, ...j }))
+        .sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+      
+      const idxAtual = jogadoresArray.findIndex(j => j.id === meuJogadorId);
+      const proximo = jogadoresArray[(idxAtual + 1) % jogadoresArray.length];
+      
+      await database.ref(`partidas/${partidaId}/vezDoJogador`).set(proximo.id);
+      
+      await database.ref(`jogada_atual/${partidaId}`).set({
+        jogadorId: proximo.id,
+        cartasViradas: [],
+        inicioJogada: Date.now()
+      });
+    }
+
+    async function finalizarJogo() {
+      // Encontrar vencedor
+      const jogadoresArray = Object.entries(jogadoresAtuais)
+        .filter(([id, j]) => j.ativo)
+        .map(([id, j]) => ({ id, ...j }))
+        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+      
+      const vencedor = jogadoresArray[0];
+      
+      await database.ref(`partidas/${partidaId}`).update({
+        finalizada: true,
+        vencedor: vencedor.id,
+        jogando: false
+      });
+    }
+
+    // ==========================================
+    // FIM DE JOGO
+    // ==========================================
+    function mostrarFimDeJogo() {
+      mostrarTela('tela-fim');
+      
+      const jogadoresArray = Object.entries(jogadoresAtuais)
+        .filter(([id, j]) => j.ativo)
+        .map(([id, j]) => ({ id, ...j }))
+        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
+      
+      const minhaPosicao = jogadoresArray.findIndex(j => j.id === meuJogadorId) + 1;
+      const meuJogador = jogadoresAtuais[meuJogadorId];
+      
+      document.getElementById('fim-posicao').textContent = `Você ficou em ${minhaPosicao}º!`;
+      document.getElementById('fim-medalha').textContent = ['🥇', '🥈', '🥉'][minhaPosicao - 1] || '🎖️';
+      document.getElementById('fim-pares').innerHTML = `Seus pares: <strong>${meuJogador?.pares || 0}</strong>`;
+      
+      // Ranking
+      const rankingContainer = document.getElementById('ranking-final');
+      rankingContainer.innerHTML = jogadoresArray.map((j, idx) => `
+        <div class="ranking-box-item ${j.id === meuJogadorId ? 'eu' : ''}">
+          <div class="ranking-box-pos">${['🥇', '🥈', '🥉'][idx] || `${idx + 1}º`}</div>
+          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-box-foto" alt="${j.nome}">
+          <div class="ranking-box-nome">${j.id === meuJogadorId ? 'Você' : j.nome}</div>
+          <div class="ranking-box-pares">${j.pares || 0}</div>
+        </div>
+      `).join('');
+      
+      // Confetes
+      mostrarConfetes();
+    }
+
+    function aguardarNovaPartida() {
+      mostrarTela('tela-aguardando');
+    }
+
+    // ==========================================
+    // FEEDBACK
+    // ==========================================
+    function mostrarFeedback(tipo, titulo, texto) {
+      const overlay = document.createElement('div');
+      overlay.className = `feedback-overlay ${tipo}`;
+      overlay.innerHTML = `
+        <div class="feedback-content">
+          <div class="feedback-icon">${tipo === 'acerto' ? '✅' : tipo === 'tempo' ? '⏰' : '❌'}</div>
+          <h2 class="feedback-titulo">${titulo}</h2>
+          <p class="feedback-texto">${texto}</p>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+      
+      if (tipo === 'acerto') {
+        mostrarConfetes();
+      }
+      
+      setTimeout(() => {
+        overlay.style.animation = 'fadeIn 0.3s ease reverse';
+        setTimeout(() => overlay.remove(), 300);
+      }, 1200);
+    }
+
+    // ==========================================
+    // CONFETES
+    // ==========================================
+    function mostrarConfetes() {
+      const container = document.createElement('div');
+      container.className = 'confetti-container';
+      document.body.appendChild(container);
+      
+      const cores = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#ffd700'];
+      
+      for (let i = 0; i < 40; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + '%';
+        piece.style.background = cores[Math.floor(Math.random() * cores.length)];
+        piece.style.animationDelay = Math.random() * 0.5 + 's';
+        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        piece.style.width = (5 + Math.random() * 8) + 'px';
+        piece.style.height = (5 + Math.random() * 8) + 'px';
+        container.appendChild(piece);
+      }
+      
+      setTimeout(() => container.remove(), 3500);
+    }
+
+    // ==========================================
+    // UTILITÁRIOS
+    // ==========================================
+    function mostrarTela(telaId) {
+      document.querySelectorAll('.tela').forEach(tela => {
+        tela.classList.remove('ativa');
+      });
+      document.getElementById(telaId).classList.add('ativa');
+    }
+
+    function gerarAvatarPadrao(nome) {
+      const inicial = nome ? nome.charAt(0).toUpperCase() : '?';
+      return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="%23667eea"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-family="sans-serif">${inicial}</text></svg>`;
+    }
+
+    // ==========================================
+    // INICIALIZAÇÃO
+    // ==========================================
+    init();
+  </script>
+</body>
+</html>
