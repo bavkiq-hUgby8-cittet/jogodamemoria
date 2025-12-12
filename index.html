@@ -10,7 +10,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -436,6 +436,16 @@
       border-radius: 12px;
       display: inline-block;
       margin: 15px 0;
+    }
+
+    .qr-code {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .qr-code img {
+      display: block;
     }
 
     .partida-info {
@@ -1650,7 +1660,7 @@
       card.innerHTML = `
         <div class="partida-nome">${partida.nome}</div>
         <div class="qr-container">
-          <canvas id="qr-${id}"></canvas>
+          <div id="qr-${id}" class="qr-code"></div>
         </div>
         <div class="partida-info">
           <span class="info-badge">📊 ${partida.nivel}</span>
@@ -1669,9 +1679,16 @@
       
       // Gerar QR Code
       setTimeout(() => {
-        const canvas = document.getElementById(`qr-${id}`);
-        if (canvas) {
-          QRCode.toCanvas(canvas, jogadorUrl, { width: 180, margin: 1 });
+        const qrContainer = document.getElementById(`qr-${id}`);
+        if (qrContainer) {
+          qrContainer.innerHTML = '';
+          new QRCode(qrContainer, {
+            text: jogadorUrl,
+            width: 180,
+            height: 180,
+            colorDark: "#1a1a2e",
+            colorLight: "#ffffff"
+          });
         }
       }, 100);
       
