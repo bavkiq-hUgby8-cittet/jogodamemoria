@@ -1144,16 +1144,18 @@
       const file = e.target.files[0];
       if (!file) return;
       
-      console.log('Arquivo selecionado:', file.name);
+      console.log('Arquivo selecionado:', file.name, file.type, file.size);
       
-      // Preview
+      // Preview com loading
       const preview = document.getElementById('foto-preview');
-      const imgUrl = URL.createObjectURL(file);
-      preview.innerHTML = '<img src="' + imgUrl + '" alt="Sua foto">';
+      preview.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div class="loader" style="width:30px;height:30px;border-width:3px;"></div><small>Enviando...</small></div>';
       
       // Upload
       try {
+        console.log('Redimensionando imagem...');
         const resized = await resizeImage(file, 400, 400);
+        console.log('Imagem redimensionada, tamanho:', resized.size);
+        
         const timestamp = Date.now();
         const random = Math.random().toString(36).substr(2, 9);
         const path = 'jogadores/' + timestamp + '_' + random + '.jpg';
@@ -1161,16 +1163,38 @@
         console.log('Fazendo upload para:', path);
         
         const storageRef = storage.ref(path);
-        await storageRef.put(resized);
-        minhaFotoUrl = await storageRef.getDownloadURL();
+        const uploadTask = await storageRef.put(resized);
+        console.log('Upload completo, obtendo URL...');
         
-        console.log('Upload concluído:', minhaFotoUrl);
+        minhaFotoUrl = await storageRef.getDownloadURL();
+        console.log('URL obtida:', minhaFotoUrl);
+        
+        // Mostrar foto carregada
+        preview.innerHTML = '<img src="' + minhaFotoUrl + '" alt="Sua foto" style="width:100%;height:100%;object-fit:cover;">';
+        preview.style.borderStyle = 'solid';
+        preview.style.borderColor = 'var(--verde)';
         
         verificarFormulario();
       } catch (error) {
         console.error('Erro no upload:', error);
-        alert('Erro ao fazer upload da foto. Tente novamente. Erro: ' + error.message);
+        console.error('Código do erro:', error.code);
+        console.error('Mensagem:', error.message);
+        
+        var msgErro = 'Erro ao enviar foto.';
+        if (error.code === 'storage/unauthorized') {
+          msgErro = 'Sem permissão para enviar fotos. Verifique as Storage Rules no Firebase.';
+        } else if (error.code === 'storage/canceled') {
+          msgErro = 'Upload cancelado.';
+        } else if (error.code === 'storage/unknown') {
+          msgErro = 'Erro desconhecido. Verifique a conexão.';
+        }
+        
+        alert(msgErro + '\n\nDetalhes: ' + error.message);
         preview.innerHTML = '<span class="placeholder">👤</span>';
+        preview.style.borderStyle = 'dashed';
+        preview.style.borderColor = 'rgba(255,255,255,0.3)';
+        minhaFotoUrl = null;
+        verificarFormulario();
       }
     }
 
@@ -1250,6 +1274,8 @@
         const novoJogadorRef = database.ref('jogadores').push();
         meuJogadorId = novoJogadorRef.key;
         
+        console.log('Salvando jogador com foto:', minhaFotoUrl);
+        
         await novoJogadorRef.set({
           partidaId: partidaId,
           nome: nome,
@@ -1258,6 +1284,8 @@
           ordem: jogadoresAtivos.length,
           ativo: true
         });
+        
+        console.log('Jogador salvo no Firebase!');
         
         // Salvar no localStorage
         localStorage.setItem('jogador_' + partidaId, meuJogadorId);

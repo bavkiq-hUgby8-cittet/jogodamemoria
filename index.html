@@ -1714,14 +1714,19 @@
         const jogadores = snapshot.val();
         const jogadoresArray = jogadores ? Object.values(jogadores).filter(j => j.ativo) : [];
         
+        console.log('Jogadores na partida:', jogadoresArray);
+        
         count.textContent = `👥 ${jogadoresArray.length}/6`;
         
-        lista.innerHTML = jogadoresArray.map(j => `
-          <div class="jogador-badge">
-            <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="jogador-foto-mini" alt="${j.nome}">
-            <span>${j.nome}</span>
-          </div>
-        `).join('');
+        lista.innerHTML = jogadoresArray.map(j => {
+          const fotoSrc = j.foto || gerarAvatarPadrao(j.nome);
+          return `
+            <div class="jogador-badge">
+              <img src="${fotoSrc}" class="jogador-foto-mini" alt="${j.nome}">
+              <span>${j.nome}</span>
+            </div>
+          `;
+        }).join('');
       });
     }
 
