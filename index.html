@@ -1387,6 +1387,12 @@
       dificil: { pares: 18, colunas: 6 }
     };
 
+    // Função auxiliar para gerar avatar padrão
+    function gerarAvatarPadrao(nome) {
+      const inicial = nome ? nome.charAt(0).toUpperCase() : '?';
+      return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#667eea"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-family="sans-serif">' + inicial + '</text></svg>');
+    }
+
     // ==========================================
     // UPLOAD DE FOTOS
     // ==========================================
@@ -1712,7 +1718,7 @@
         
         lista.innerHTML = jogadoresArray.map(j => `
           <div class="jogador-badge">
-            <img src="${j.foto || 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"%23667eea\"/><text x=\"50\" y=\"65\" text-anchor=\"middle\" fill=\"white\" font-size=\"40\">${j.nome.charAt(0)}</text></svg>'}" class="jogador-foto-mini" alt="${j.nome}">
+            <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="jogador-foto-mini" alt="${j.nome}">
             <span>${j.nome}</span>
           </div>
         `).join('');
@@ -1901,7 +1907,7 @@
       
       container.innerHTML = `
         <div class="vez-jogador">
-          <img src="${jogador.foto || 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"%23667eea\"/><text x=\"50\" y=\"65\" text-anchor=\"middle\" fill=\"white\" font-size=\"40\">${jogador.nome.charAt(0)}</text></svg>'}" class="vez-foto" alt="${jogador.nome}">
+          <img src="${jogador.foto || gerarAvatarPadrao(jogador.nome)}" class="vez-foto" alt="${jogador.nome}">
           <div class="vez-nome">${jogador.nome}</div>
           <div class="vez-timer" id="vez-timer">--</div>
         </div>
@@ -1952,7 +1958,7 @@
       container.innerHTML = jogadoresArray.map((j, idx) => `
         <div class="ranking-item">
           <div class="ranking-posicao">${idx + 1}º</div>
-          <img src="${j.foto || 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"%23667eea\"/><text x=\"50\" y=\"65\" text-anchor=\"middle\" fill=\"white\" font-size=\"40\">${j.nome.charAt(0)}</text></svg>'}" class="ranking-foto" alt="${j.nome}">
+          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-foto" alt="${j.nome}">
           <div class="ranking-info">
             <div class="ranking-nome">${j.nome}</div>
             <div class="ranking-pares">
@@ -2020,7 +2026,7 @@
           lugar.className = 'podio-lugar';
           lugar.innerHTML = `
             ${i === 0 ? '<div class="coroa">👑</div>' : ''}
-            <img src="${j.foto || 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"%23667eea\"/><text x=\"50\" y=\"65\" text-anchor=\"middle\" fill=\"white\" font-size=\"40\">${j.nome.charAt(0)}</text></svg>'}" class="podio-foto" alt="${j.nome}">
+            <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="podio-foto" alt="${j.nome}">
             <div class="podio-nome">${j.nome}</div>
             <div class="podio-pares">${j.pares || 0} pares</div>
             <div class="podio-base">${i + 1}</div>
@@ -2034,7 +2040,7 @@
       rankingContainer.innerHTML = ranking.map((j, idx) => `
         <div class="ranking-final-item">
           <div class="ranking-final-pos">${['🥇', '🥈', '🥉'][idx] || `${idx + 1}º`}</div>
-          <img src="${j.foto || 'data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"50\" fill=\"%23667eea\"/><text x=\"50\" y=\"65\" text-anchor=\"middle\" fill=\"white\" font-size=\"40\">${j.nome.charAt(0)}</text></svg>'}" class="ranking-final-foto" alt="${j.nome}">
+          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-final-foto" alt="${j.nome}">
           <div class="ranking-final-nome">${j.nome}</div>
           <div class="ranking-final-pares">${j.pares || 0} pares</div>
         </div>
