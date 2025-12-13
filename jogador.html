@@ -514,27 +514,31 @@
     .tabuleiro {
       flex: 1;
       display: grid;
-      gap: 8px;
+      gap: 6px;
       align-content: center;
       justify-content: center;
       width: 100%;
+      padding: 5px;
     }
 
+    /* Fácil: 8 pares = 16 cartas = 4x4 */
     .tabuleiro.facil {
       grid-template-columns: repeat(4, 1fr);
       max-width: 320px;
       margin: 0 auto;
     }
 
+    /* Médio: 12 pares = 24 cartas = 6x4 */
     .tabuleiro.medio {
-      grid-template-columns: repeat(4, 1fr);
-      max-width: 300px;
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 100%;
       margin: 0 auto;
     }
 
+    /* Difícil: 18 pares = 36 cartas = 6x6 */
     .tabuleiro.dificil {
       grid-template-columns: repeat(6, 1fr);
-      max-width: 360px;
+      max-width: 100%;
       margin: 0 auto;
     }
 
