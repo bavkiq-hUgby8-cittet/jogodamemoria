@@ -191,6 +191,221 @@
       display: none;
     }
 
+    /* Botão fotos anteriores */
+    .btn-fotos-anteriores {
+      display: block;
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      border: 2px dashed var(--laranja);
+      border-radius: 12px;
+      background: rgba(245, 175, 25, 0.1);
+      color: var(--laranja);
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-fotos-anteriores:hover {
+      background: rgba(245, 175, 25, 0.2);
+      transform: scale(1.01);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.ativa {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-dark);
+      border-radius: 20px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      padding: 20px 25px;
+      background: linear-gradient(135deg, var(--roxo) 0%, var(--rosa) 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.5rem;
+    }
+
+    .modal-close {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(255,255,255,0.3);
+      transform: rotate(90deg);
+    }
+
+    .modal-body {
+      padding: 25px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .modal-empty {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .modal-empty-icon {
+      font-size: 4rem;
+      margin-bottom: 15px;
+    }
+
+    .fotos-anteriores-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    .foto-anterior {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .foto-anterior:hover {
+      transform: scale(1.05);
+      border-color: var(--roxo);
+    }
+
+    .foto-anterior.selecionada {
+      border-color: var(--verde);
+      box-shadow: 0 0 20px rgba(67, 233, 123, 0.5);
+    }
+
+    .foto-anterior img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .foto-anterior .check {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 25px;
+      height: 25px;
+      background: var(--verde);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: white;
+    }
+
+    .foto-anterior.selecionada .check {
+      display: flex;
+    }
+
+    .modal-footer {
+      padding: 20px 25px;
+      background: rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .modal-info {
+      color: var(--text-muted);
+    }
+
+    .modal-info strong {
+      color: var(--verde);
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-modal {
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-modal-cancelar {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.3);
+      color: white;
+    }
+
+    .btn-modal-cancelar:hover {
+      border-color: white;
+    }
+
+    .btn-modal-confirmar {
+      background: linear-gradient(135deg, var(--verde) 0%, #38d9a9 100%);
+      border: none;
+      color: white;
+    }
+
+    .btn-modal-confirmar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(67, 233, 123, 0.4);
+    }
+
+    .btn-modal-confirmar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Preview de Fotos */
     .fotos-container {
       margin-top: 25px;
@@ -1227,6 +1442,11 @@
           </div>
         </div>
         <input type="file" id="input-fotos" multiple accept="image/*">
+        
+        <!-- Botão Fotos Anteriores -->
+        <button class="btn-fotos-anteriores" onclick="abrirFotosAnteriores()">
+          📂 Usar fotos de jogos anteriores
+        </button>
 
         <!-- Preview das Fotos -->
         <div class="fotos-container" id="fotos-container" style="display: none;">
@@ -1353,6 +1573,33 @@
       <div class="fim-btns">
         <button class="btn-fim btn-jogar-novamente" onclick="jogarNovamente()">🔄 Jogar Novamente</button>
         <button class="btn-fim btn-nova-partida" onclick="novaPartida()">➕ Nova Partida</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Fotos Anteriores -->
+  <div class="modal-overlay" id="modal-fotos">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">📂 Fotos Anteriores</h2>
+        <button class="modal-close" onclick="fecharFotosAnteriores()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-fotos-body">
+        <div class="modal-loading">
+          <div class="loader"></div>
+          <p>Carregando fotos...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-info">
+          Selecionadas: <strong id="fotos-selecionadas-count">0</strong>
+        </div>
+        <div class="modal-btns">
+          <button class="btn-modal btn-modal-cancelar" onclick="fecharFotosAnteriores()">Cancelar</button>
+          <button class="btn-modal btn-modal-confirmar" id="btn-usar-fotos" onclick="usarFotosSelecionadas()" disabled>
+            ✓ Usar Fotos
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1527,6 +1774,152 @@
       // Verificar se pode criar partida
       const minFotos = NIVEIS[nivelSelecionado].pares;
       document.getElementById('btn-criar').disabled = count < minFotos;
+    }
+
+    // ==========================================
+    // FOTOS ANTERIORES
+    // ==========================================
+    let fotosAnteriores = [];
+    let fotosSelecionadasModal = [];
+
+    async function abrirFotosAnteriores() {
+      // Mostrar modal
+      document.getElementById('modal-fotos').classList.add('ativa');
+      
+      // Resetar seleção
+      fotosSelecionadasModal = [];
+      atualizarContadorModal();
+      
+      // Carregar fotos
+      document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-loading"><div class="loader"></div><p>Carregando fotos...</p></div>';
+      
+      try {
+        fotosAnteriores = await listarFotosStorage();
+        
+        if (fotosAnteriores.length === 0) {
+          document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-empty"><div class="modal-empty-icon">📷</div><p>Nenhuma foto encontrada.</p><p><small>Faça upload de fotos para começar.</small></p></div>';
+          return;
+        }
+        
+        renderizarFotosAnteriores();
+        
+      } catch (error) {
+        console.error('Erro ao carregar fotos:', error);
+        document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-empty"><div class="modal-empty-icon">❌</div><p>Erro ao carregar fotos.</p><p><small>' + error.message + '</small></p></div>';
+      }
+    }
+
+    async function listarFotosStorage() {
+      const fotos = [];
+      
+      // Listar pasta /memorias/
+      try {
+        const memoriasRef = storage.ref('memorias');
+        const memoriasResult = await memoriasRef.listAll();
+        
+        for (const item of memoriasResult.items) {
+          try {
+            const url = await item.getDownloadURL();
+            fotos.push({ name: item.name, url: url, path: item.fullPath });
+          } catch (e) {
+            console.warn('Erro ao obter URL:', item.name);
+          }
+        }
+      } catch (e) {
+        console.log('Pasta memorias não existe ou vazia');
+      }
+      
+      // Ordenar por nome (mais recentes primeiro se tiver timestamp)
+      fotos.sort((a, b) => b.name.localeCompare(a.name));
+      
+      return fotos;
+    }
+
+    function renderizarFotosAnteriores() {
+      const container = document.getElementById('modal-fotos-body');
+      
+      let html = '<div class="fotos-anteriores-grid">';
+      
+      fotosAnteriores.forEach((foto, idx) => {
+        const selecionada = fotosSelecionadasModal.includes(foto.url) ? 'selecionada' : '';
+        html += '<div class="foto-anterior ' + selecionada + '" onclick="toggleFotoAnterior(' + idx + ')" data-url="' + foto.url + '">' +
+          '<img src="' + foto.url + '" alt="Foto">' +
+          '<div class="check">✓</div>' +
+        '</div>';
+      });
+      
+      html += '</div>';
+      
+      container.innerHTML = html;
+    }
+
+    function toggleFotoAnterior(idx) {
+      const foto = fotosAnteriores[idx];
+      const urlIndex = fotosSelecionadasModal.indexOf(foto.url);
+      
+      if (urlIndex === -1) {
+        fotosSelecionadasModal.push(foto.url);
+      } else {
+        fotosSelecionadasModal.splice(urlIndex, 1);
+      }
+      
+      // Atualizar visual
+      const elementos = document.querySelectorAll('.foto-anterior');
+      elementos[idx].classList.toggle('selecionada');
+      
+      atualizarContadorModal();
+    }
+
+    function atualizarContadorModal() {
+      const count = fotosSelecionadasModal.length;
+      document.getElementById('fotos-selecionadas-count').textContent = count;
+      document.getElementById('btn-usar-fotos').disabled = count === 0;
+    }
+
+    function fecharFotosAnteriores() {
+      document.getElementById('modal-fotos').classList.remove('ativa');
+    }
+
+    function usarFotosSelecionadas() {
+      if (fotosSelecionadasModal.length === 0) return;
+      
+      // Adicionar às fotos carregadas (evitando duplicatas)
+      fotosSelecionadasModal.forEach(url => {
+        if (!fotosCarregadas.includes(url)) {
+          fotosCarregadas.push(url);
+          
+          // Criar preview
+          const preview = criarPreviewUrl(url);
+          document.getElementById('fotos-grid').appendChild(preview);
+        }
+      });
+      
+      atualizarContador();
+      fecharFotosAnteriores();
+    }
+
+    function criarPreviewUrl(url) {
+      const div = document.createElement('div');
+      div.className = 'foto-preview';
+      div.dataset.url = url;
+      
+      const img = document.createElement('img');
+      img.src = url;
+      
+      const btnRemover = document.createElement('button');
+      btnRemover.className = 'btn-remover';
+      btnRemover.innerHTML = '✕';
+      btnRemover.onclick = (e) => {
+        e.stopPropagation();
+        fotosCarregadas = fotosCarregadas.filter(f => f !== url);
+        div.remove();
+        atualizarContador();
+      };
+      
+      div.appendChild(img);
+      div.appendChild(btnRemover);
+      
+      return div;
     }
 
     // ==========================================
