@@ -2,15 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Painel do operador do Jogo da Memória da família Veloso.">
   <title>🎴 Jogo da Memória dos Veloso - Painel do Operador</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='90'%3E%F0%9F%8E%B4%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-storage-compat.js"></script>
   <style>
     * {
       margin: 0;
@@ -1145,8 +1147,8 @@
       animation: subirPodio 0.8s ease backwards;
     }
 
-    .podio-lugar:nth-child(1) { animation-delay: 0.5s; }
-    .podio-lugar:nth-child(2) { animation-delay: 0.3s; order: -1; }
+    .podio-lugar:nth-child(1) { animation-delay: 0.2s; }
+    .podio-lugar:nth-child(2) { animation-delay: 0.45s; }
     .podio-lugar:nth-child(3) { animation-delay: 0.1s; }
 
     @keyframes subirPodio {
@@ -1244,9 +1246,9 @@
       background: rgba(255,255,255,0.05);
     }
 
-    .ranking-final-item:nth-child(2) { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.1)); }
-    .ranking-final-item:nth-child(3) { background: linear-gradient(135deg, rgba(192, 192, 192, 0.2), rgba(168, 168, 168, 0.1)); }
-    .ranking-final-item:nth-child(4) { background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(184, 134, 11, 0.1)); }
+    .ranking-final-item:nth-child(1) { background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 193, 7, 0.1)); }
+    .ranking-final-item:nth-child(2) { background: linear-gradient(135deg, rgba(192, 192, 192, 0.2), rgba(168, 168, 168, 0.1)); }
+    .ranking-final-item:nth-child(3) { background: linear-gradient(135deg, rgba(205, 127, 50, 0.2), rgba(184, 134, 11, 0.1)); }
 
     .ranking-final-pos {
       font-size: 1.8rem;
@@ -1408,10 +1410,122 @@
 
       .podio-container {
         flex-direction: column;
+        align-items: center;
       }
+    }
 
-      .podio-lugar:nth-child(2) {
-        order: 0;
+    .status-conexao,
+    .banner-erro,
+    .aviso-storage {
+      margin: 16px 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: rgba(245, 175, 25, 0.15);
+      border: 1px solid rgba(245, 175, 25, 0.45);
+      color: #ffe7b0;
+    }
+
+    .banner-erro {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.45);
+      color: #fecaca;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: #111827;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 1100;
+      max-width: min(520px, calc(100% - 32px));
+      text-align: center;
+    }
+
+    .toast.visivel {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .link-linha {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .link-partida {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.25);
+      color: white;
+      font-family: inherit;
+    }
+
+    button.foto-anterior {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      display: block;
+      width: 100%;
+    }
+
+    button.foto-anterior.indisponivel {
+      opacity: 0.4;
+      filter: grayscale(1);
+      cursor: not-allowed;
+    }
+
+    .carta-frente.sem-foto,
+    .img-quebrada {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2a2a40;
+      color: white;
+      font-size: 0.75rem;
+      text-align: center;
+      padding: 6px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    button:focus-visible,
+    .upload-zone:focus-visible,
+    .nivel-btn:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--amarelo);
+      outline-offset: 3px;
+    }
+
+    @media (hover: none) {
+      .foto-preview .btn-remover { opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
       }
     }
   </style>
@@ -1423,10 +1537,14 @@
       <span class="logo-emoji">🎴</span>
       <span>Jogo da Memória dos Veloso</span>
     </div>
-    <button class="btn-reset" onclick="resetarTudo()">🔄 RESET GERAL</button>
+    <button type="button" class="btn-reset" onclick="resetarTudo()">🔄 RESET GERAL</button>
   </header>
 
+  <div id="status-conexao" class="status-conexao" hidden>Conexão instável. Tentando reconectar…</div>
+  <div id="anuncio" class="sr-only" aria-live="polite"></div>
+
   <div class="container">
+    <div id="banner-erro" class="banner-erro" hidden></div>
     <!-- TELA 1: CONFIGURAÇÃO -->
     <div id="tela-config" class="tela ativa">
       <!-- Card Criar Partida -->
@@ -1434,17 +1552,17 @@
         <h2 class="card-title">📸 CRIAR NOVA PARTIDA</h2>
         
         <!-- Upload de Fotos -->
-        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('input-fotos').click()">
+        <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Selecionar fotos das cartas" onclick="document.getElementById('input-fotos').click()">
           <div class="upload-icon">📷</div>
           <div class="upload-text">
             <strong>Arraste fotos</strong> ou clique para selecionar<br>
-            <small>Mínimo 8 fotos para nível fácil</small>
+            <small id="upload-dica">Mínimo 8 fotos para o nível fácil</small>
           </div>
         </div>
         <input type="file" id="input-fotos" multiple accept="image/*">
         
         <!-- Botão Fotos Anteriores -->
-        <button class="btn-fotos-anteriores" onclick="abrirFotosAnteriores()">
+        <button type="button" class="btn-fotos-anteriores" onclick="abrirFotosAnteriores()">
           📂 Usar fotos de jogos anteriores
         </button>
 
@@ -1464,7 +1582,7 @@
             </button>
             <button class="nivel-btn medio" data-nivel="medio" onclick="selecionarNivel('medio')">
               <div class="nivel-nome">🟡 Médio</div>
-              <div class="nivel-info">12 pares (4×6)</div>
+              <div class="nivel-info">12 pares (6×4)</div>
             </button>
             <button class="nivel-btn dificil" data-nivel="dificil" onclick="selecionarNivel('dificil')">
               <div class="nivel-nome">🔴 Difícil</div>
@@ -1480,11 +1598,12 @@
         </div>
 
         <div class="config-section">
-          <div class="config-label">✏️ Nome da Partida:</div>
-          <input type="text" class="input-nome" id="nome-partida" placeholder='ex: "Memória Natal 2024"'>
+          <label class="config-label" for="nome-partida">✏️ Nome da Partida:</label>
+          <input type="text" class="input-nome" id="nome-partida" maxlength="80" placeholder="ex: Memória Natal 2026" autocomplete="off">
         </div>
 
-        <button class="btn-criar" id="btn-criar" onclick="criarPartida()" disabled>
+        <p id="aviso-storage" class="aviso-storage" hidden></p>
+        <button type="button" class="btn-criar" id="btn-criar" onclick="criarPartida()" disabled>
           🎮 CRIAR PARTIDA
         </button>
       </div>
@@ -1552,8 +1671,8 @@
 
           <!-- Botões -->
           <div class="jogo-btns">
-            <button class="btn-jogo btn-voltar" onclick="voltarConfig()">⬅️ Voltar</button>
-            <button class="btn-jogo btn-encerrar" onclick="encerrarPartidaAtual()">🛑 Encerrar</button>
+            <button type="button" class="btn-jogo btn-voltar" onclick="voltarConfig()">⬅️ Voltar</button>
+            <button type="button" class="btn-jogo btn-encerrar" onclick="encerrarPartidaAtual()">🛑 Encerrar</button>
           </div>
         </div>
       </div>
@@ -1571,18 +1690,18 @@
       </div>
 
       <div class="fim-btns">
-        <button class="btn-fim btn-jogar-novamente" onclick="jogarNovamente()">🔄 Jogar Novamente</button>
-        <button class="btn-fim btn-nova-partida" onclick="novaPartida()">➕ Nova Partida</button>
+        <button type="button" class="btn-fim btn-jogar-novamente" onclick="jogarNovamente()">🔄 Jogar Novamente</button>
+        <button type="button" class="btn-fim btn-nova-partida" onclick="novaPartida()">➕ Nova Partida</button>
       </div>
     </div>
   </div>
 
   <!-- Modal Fotos Anteriores -->
   <div class="modal-overlay" id="modal-fotos">
-    <div class="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-fotos-anteriores">
       <div class="modal-header">
-        <h2 class="modal-title">📂 Fotos Anteriores</h2>
-        <button class="modal-close" onclick="fecharFotosAnteriores()">✕</button>
+        <h2 class="modal-title" id="titulo-fotos-anteriores">📂 Fotos Anteriores</h2>
+        <button type="button" class="modal-close" onclick="fecharFotosAnteriores()" aria-label="Fechar">✕</button>
       </div>
       <div class="modal-body" id="modal-fotos-body">
         <div class="modal-loading">
@@ -1595,8 +1714,8 @@
           Selecionadas: <strong id="fotos-selecionadas-count">0</strong>
         </div>
         <div class="modal-btns">
-          <button class="btn-modal btn-modal-cancelar" onclick="fecharFotosAnteriores()">Cancelar</button>
-          <button class="btn-modal btn-modal-confirmar" id="btn-usar-fotos" onclick="usarFotosSelecionadas()" disabled>
+          <button type="button" class="btn-modal btn-modal-cancelar" onclick="fecharFotosAnteriores()">Cancelar</button>
+          <button type="button" class="btn-modal btn-modal-confirmar" id="btn-usar-fotos" onclick="usarFotosSelecionadas()" disabled>
             ✓ Usar Fotos
           </button>
         </div>
@@ -1604,1010 +1723,9 @@
     </div>
   </div>
 
-  <script>
-    // ==========================================
-    // CONFIGURAÇÃO FIREBASE
-    // ==========================================
-    const firebaseConfig = {
-      apiKey: "AIzaSyCwU3iGOAk1p4AHQe3EpYrShx5zzSe4S5Q",
-      authDomain: "jogodamemoria-61432.firebaseapp.com",
-      databaseURL: "https://jogodamemoria-61432-default-rtdb.firebaseio.com",
-      projectId: "jogodamemoria-61432",
-      storageBucket: "jogodamemoria-61432.firebasestorage.app",
-      messagingSenderId: "131881486944",
-      appId: "1:131881486944:web:653271faeb8ab0f5e25105"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const storage = firebase.storage();
-
-    // ==========================================
-    // VARIÁVEIS GLOBAIS
-    // ==========================================
-    let fotosCarregadas = [];
-    let nivelSelecionado = 'facil';
-    let tempoPorJogada = 10;
-    let partidaAtualId = null;
-    let unsubscribers = [];
-
-    const NIVEIS = {
-      facil: { pares: 8, colunas: 4 },
-      medio: { pares: 12, colunas: 6 },
-      dificil: { pares: 18, colunas: 6 }
-    };
-
-    // Função auxiliar para gerar avatar padrão
-    function gerarAvatarPadrao(nome) {
-      const inicial = nome ? nome.charAt(0).toUpperCase() : '?';
-      return 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#667eea"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="40" font-family="sans-serif">' + inicial + '</text></svg>');
-    }
-
-    // ==========================================
-    // UPLOAD DE FOTOS
-    // ==========================================
-    const uploadZone = document.getElementById('upload-zone');
-    const inputFotos = document.getElementById('input-fotos');
-
-    // Drag and drop
-    uploadZone.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadZone.classList.add('dragover');
-    });
-
-    uploadZone.addEventListener('dragleave', () => {
-      uploadZone.classList.remove('dragover');
-    });
-
-    uploadZone.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadZone.classList.remove('dragover');
-      handleFiles(e.dataTransfer.files);
-    });
-
-    inputFotos.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-    });
-
-    async function handleFiles(files) {
-      const filesArray = Array.from(files);
-      
-      for (const file of filesArray) {
-        if (!file.type.startsWith('image/')) continue;
-        
-        // Mostrar preview
-        const preview = criarPreview(file);
-        document.getElementById('fotos-grid').appendChild(preview);
-        
-        // Upload para Firebase Storage
-        try {
-          const url = await uploadFoto(file);
-          fotosCarregadas.push(url);
-          preview.dataset.url = url;
-        } catch (error) {
-          console.error('Erro no upload:', error);
-          preview.remove();
-        }
-        
-        atualizarContador();
-      }
-    }
-
-    function criarPreview(file) {
-      const div = document.createElement('div');
-      div.className = 'foto-preview';
-      
-      const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
-      
-      const btnRemover = document.createElement('button');
-      btnRemover.className = 'btn-remover';
-      btnRemover.innerHTML = '✕';
-      btnRemover.onclick = (e) => {
-        e.stopPropagation();
-        const url = div.dataset.url;
-        if (url) {
-          fotosCarregadas = fotosCarregadas.filter(f => f !== url);
-        }
-        div.remove();
-        atualizarContador();
-      };
-      
-      div.appendChild(img);
-      div.appendChild(btnRemover);
-      
-      return div;
-    }
-
-    async function uploadFoto(file) {
-      const resized = await resizeImage(file, 800, 1000);
-      const timestamp = Date.now();
-      const random = Math.random().toString(36).substr(2, 9);
-      const path = `memorias/${timestamp}_${random}.jpg`;
-      
-      const storageRef = storage.ref(path);
-      await storageRef.put(resized);
-      
-      return await storageRef.getDownloadURL();
-    }
-
-    function resizeImage(file, maxWidth, maxHeight) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width;
-            let height = img.height;
-            
-            if (width > height) {
-              if (width > maxWidth) {
-                height = (height * maxWidth) / width;
-                width = maxWidth;
-              }
-            } else {
-              if (height > maxHeight) {
-                width = (width * maxHeight) / height;
-                height = maxHeight;
-              }
-            }
-            
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            
-            canvas.toBlob(resolve, 'image/jpeg', 0.8);
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function atualizarContador() {
-      const count = fotosCarregadas.length;
-      document.getElementById('fotos-count').textContent = count;
-      document.getElementById('fotos-container').style.display = count > 0 ? 'block' : 'none';
-      
-      // Verificar se pode criar partida
-      const minFotos = NIVEIS[nivelSelecionado].pares;
-      document.getElementById('btn-criar').disabled = count < minFotos;
-    }
-
-    // ==========================================
-    // FOTOS ANTERIORES
-    // ==========================================
-    let fotosAnteriores = [];
-    let fotosSelecionadasModal = [];
-
-    async function abrirFotosAnteriores() {
-      // Mostrar modal
-      document.getElementById('modal-fotos').classList.add('ativa');
-      
-      // Resetar seleção
-      fotosSelecionadasModal = [];
-      atualizarContadorModal();
-      
-      // Carregar fotos
-      document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-loading"><div class="loader"></div><p>Carregando fotos...</p></div>';
-      
-      try {
-        fotosAnteriores = await listarFotosStorage();
-        
-        if (fotosAnteriores.length === 0) {
-          document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-empty"><div class="modal-empty-icon">📷</div><p>Nenhuma foto encontrada.</p><p><small>Faça upload de fotos para começar.</small></p></div>';
-          return;
-        }
-        
-        renderizarFotosAnteriores();
-        
-      } catch (error) {
-        console.error('Erro ao carregar fotos:', error);
-        document.getElementById('modal-fotos-body').innerHTML = '<div class="modal-empty"><div class="modal-empty-icon">❌</div><p>Erro ao carregar fotos.</p><p><small>' + error.message + '</small></p></div>';
-      }
-    }
-
-    async function listarFotosStorage() {
-      const fotos = [];
-      
-      // Listar pasta /memorias/
-      try {
-        const memoriasRef = storage.ref('memorias');
-        const memoriasResult = await memoriasRef.listAll();
-        
-        for (const item of memoriasResult.items) {
-          try {
-            const url = await item.getDownloadURL();
-            fotos.push({ name: item.name, url: url, path: item.fullPath });
-          } catch (e) {
-            console.warn('Erro ao obter URL:', item.name);
-          }
-        }
-      } catch (e) {
-        console.log('Pasta memorias não existe ou vazia');
-      }
-      
-      // Ordenar por nome (mais recentes primeiro se tiver timestamp)
-      fotos.sort((a, b) => b.name.localeCompare(a.name));
-      
-      return fotos;
-    }
-
-    function renderizarFotosAnteriores() {
-      const container = document.getElementById('modal-fotos-body');
-      
-      let html = '<div class="fotos-anteriores-grid">';
-      
-      fotosAnteriores.forEach((foto, idx) => {
-        const selecionada = fotosSelecionadasModal.includes(foto.url) ? 'selecionada' : '';
-        html += '<div class="foto-anterior ' + selecionada + '" onclick="toggleFotoAnterior(' + idx + ')" data-url="' + foto.url + '">' +
-          '<img src="' + foto.url + '" alt="Foto">' +
-          '<div class="check">✓</div>' +
-        '</div>';
-      });
-      
-      html += '</div>';
-      
-      container.innerHTML = html;
-    }
-
-    function toggleFotoAnterior(idx) {
-      const foto = fotosAnteriores[idx];
-      const urlIndex = fotosSelecionadasModal.indexOf(foto.url);
-      
-      if (urlIndex === -1) {
-        fotosSelecionadasModal.push(foto.url);
-      } else {
-        fotosSelecionadasModal.splice(urlIndex, 1);
-      }
-      
-      // Atualizar visual
-      const elementos = document.querySelectorAll('.foto-anterior');
-      elementos[idx].classList.toggle('selecionada');
-      
-      atualizarContadorModal();
-    }
-
-    function atualizarContadorModal() {
-      const count = fotosSelecionadasModal.length;
-      document.getElementById('fotos-selecionadas-count').textContent = count;
-      document.getElementById('btn-usar-fotos').disabled = count === 0;
-    }
-
-    function fecharFotosAnteriores() {
-      document.getElementById('modal-fotos').classList.remove('ativa');
-    }
-
-    function usarFotosSelecionadas() {
-      if (fotosSelecionadasModal.length === 0) return;
-      
-      // Adicionar às fotos carregadas (evitando duplicatas)
-      fotosSelecionadasModal.forEach(url => {
-        if (!fotosCarregadas.includes(url)) {
-          fotosCarregadas.push(url);
-          
-          // Criar preview
-          const preview = criarPreviewUrl(url);
-          document.getElementById('fotos-grid').appendChild(preview);
-        }
-      });
-      
-      atualizarContador();
-      fecharFotosAnteriores();
-    }
-
-    function criarPreviewUrl(url) {
-      const div = document.createElement('div');
-      div.className = 'foto-preview';
-      div.dataset.url = url;
-      
-      const img = document.createElement('img');
-      img.src = url;
-      
-      const btnRemover = document.createElement('button');
-      btnRemover.className = 'btn-remover';
-      btnRemover.innerHTML = '✕';
-      btnRemover.onclick = (e) => {
-        e.stopPropagation();
-        fotosCarregadas = fotosCarregadas.filter(f => f !== url);
-        div.remove();
-        atualizarContador();
-      };
-      
-      div.appendChild(img);
-      div.appendChild(btnRemover);
-      
-      return div;
-    }
-
-    // ==========================================
-    // CONFIGURAÇÕES
-    // ==========================================
-    function selecionarNivel(nivel) {
-      nivelSelecionado = nivel;
-      document.querySelectorAll('.nivel-btn').forEach(btn => {
-        btn.classList.remove('selecionado');
-      });
-      document.querySelector(`[data-nivel="${nivel}"]`).classList.add('selecionado');
-      atualizarContador();
-    }
-
-    function atualizarTempo(valor) {
-      tempoPorJogada = parseInt(valor);
-      document.getElementById('tempo-valor').textContent = valor;
-    }
-
-    // ==========================================
-    // CRIAR PARTIDA
-    // ==========================================
-    async function criarPartida() {
-      const nome = document.getElementById('nome-partida').value.trim() || `Partida ${Date.now()}`;
-      const minFotos = NIVEIS[nivelSelecionado].pares;
-      
-      if (fotosCarregadas.length < minFotos) {
-        alert(`Você precisa de pelo menos ${minFotos} fotos para o nível ${nivelSelecionado}`);
-        return;
-      }
-      
-      const partidaId = database.ref('partidas').push().key;
-      
-      // Selecionar fotos necessárias
-      const fotosSelecionadas = fotosCarregadas.slice(0, minFotos);
-      
-      // Criar tabuleiro
-      const tabuleiro = criarTabuleiro(fotosSelecionadas, nivelSelecionado);
-      
-      // Salvar partida
-      await database.ref(`partidas/${partidaId}`).set({
-        nome: nome,
-        fotos: fotosSelecionadas,
-        nivel: nivelSelecionado,
-        totalPares: minFotos,
-        tempoPorJogada: tempoPorJogada,
-        maxJogadores: 6,
-        ativa: true,
-        jogando: false,
-        vezDoJogador: null,
-        paresEncontrados: 0,
-        totalJogadas: 0,
-        finalizada: false,
-        vencedor: null,
-        criadaEm: Date.now()
-      });
-      
-      // Salvar tabuleiro
-      await database.ref(`tabuleiro/${partidaId}`).set(tabuleiro);
-      
-      // Limpar formulário
-      fotosCarregadas = [];
-      document.getElementById('fotos-grid').innerHTML = '';
-      document.getElementById('fotos-container').style.display = 'none';
-      document.getElementById('nome-partida').value = '';
-      atualizarContador();
-      
-      alert('Partida criada com sucesso!');
-    }
-
-    function criarTabuleiro(fotos, nivel) {
-      const cartas = [];
-      
-      fotos.forEach((foto, idx) => {
-        cartas.push({ id: `c${idx}_a`, fotoUrl: foto, encontrada: false });
-        cartas.push({ id: `c${idx}_b`, fotoUrl: foto, encontrada: false });
-      });
-      
-      // Embaralhar
-      const posicoes = embaralhar(cartas.map(c => c.id));
-      
-      // Criar objeto de cartas indexado
-      const cartasObj = {};
-      cartas.forEach(c => {
-        cartasObj[c.id] = c;
-      });
-      
-      return { cartas: cartasObj, posicoes };
-    }
-
-    function embaralhar(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-
-    // ==========================================
-    // LISTAR PARTIDAS ATIVAS
-    // ==========================================
-    function carregarPartidas() {
-      database.ref('partidas').orderByChild('ativa').equalTo(true).on('value', (snapshot) => {
-        const container = document.getElementById('partidas-lista');
-        container.innerHTML = '';
-        
-        const partidas = snapshot.val();
-        if (!partidas) {
-          container.innerHTML = `
-            <div class="empty-message">
-              <div class="emoji">🎴</div>
-              <p>Nenhuma partida ativa</p>
-              <p><small>Crie uma nova partida acima</small></p>
-            </div>
-          `;
-          return;
-        }
-        
-        const grid = document.createElement('div');
-        grid.className = 'partidas-grid';
-        
-        Object.entries(partidas).forEach(([id, partida]) => {
-          const card = criarCardPartida(id, partida);
-          grid.appendChild(card);
-        });
-        
-        container.appendChild(grid);
-      });
-    }
-
-    function criarCardPartida(id, partida) {
-      const card = document.createElement('div');
-      card.className = 'partida-card';
-      
-      // Gerar URL do jogador
-      const baseUrl = window.location.href.replace('index.html', '').replace(/\/$/, '');
-      const jogadorUrl = `${baseUrl}/jogador.html?partida=${id}`;
-      
-      card.innerHTML = `
-        <div class="partida-nome">${partida.nome}</div>
-        <div class="qr-container">
-          <div id="qr-${id}" class="qr-code"></div>
-        </div>
-        <div class="partida-info">
-          <span class="info-badge">📊 ${partida.nivel}</span>
-          <span class="info-badge">⏱️ ${partida.tempoPorJogada}s</span>
-          <span class="info-badge" id="jogadores-count-${id}">👥 0/6</span>
-        </div>
-        <div class="jogadores-lista" id="jogadores-lista-${id}"></div>
-        <div class="partida-btns">
-          <button class="btn-partida btn-iniciar" onclick="iniciarJogo('${id}')" ${partida.jogando ? 'disabled' : ''}>
-            ${partida.jogando ? '🎮 Em Andamento' : '▶️ Iniciar'}
-          </button>
-          <button class="btn-partida btn-ver" onclick="abrirJogo('${id}')">👁️ Ver</button>
-          <button class="btn-partida btn-encerrar" onclick="encerrarPartida('${id}')">🗑️ Encerrar</button>
-        </div>
-      `;
-      
-      // Gerar QR Code
-      setTimeout(() => {
-        const qrContainer = document.getElementById(`qr-${id}`);
-        if (qrContainer) {
-          qrContainer.innerHTML = '';
-          new QRCode(qrContainer, {
-            text: jogadorUrl,
-            width: 180,
-            height: 180,
-            colorDark: "#1a1a2e",
-            colorLight: "#ffffff"
-          });
-        }
-      }, 100);
-      
-      // Carregar jogadores
-      carregarJogadoresPartida(id);
-      
-      return card;
-    }
-
-    function carregarJogadoresPartida(partidaId) {
-      database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).on('value', (snapshot) => {
-        const lista = document.getElementById(`jogadores-lista-${partidaId}`);
-        const count = document.getElementById(`jogadores-count-${partidaId}`);
-        
-        if (!lista || !count) return;
-        
-        const jogadores = snapshot.val();
-        const jogadoresArray = jogadores ? Object.values(jogadores).filter(j => j.ativo) : [];
-        
-        console.log('Jogadores na partida:', jogadoresArray);
-        
-        count.textContent = `👥 ${jogadoresArray.length}/6`;
-        
-        lista.innerHTML = jogadoresArray.map(j => {
-          const fotoSrc = j.foto || gerarAvatarPadrao(j.nome);
-          return `
-            <div class="jogador-badge">
-              <img src="${fotoSrc}" class="jogador-foto-mini" alt="${j.nome}">
-              <span>${j.nome}</span>
-            </div>
-          `;
-        }).join('');
-      });
-    }
-
-    // ==========================================
-    // INICIAR JOGO
-    // ==========================================
-    async function iniciarJogo(partidaId) {
-      // Verificar se há jogadores
-      const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).once('value');
-      const jogadores = jogadoresSnap.val();
-      
-      if (!jogadores) {
-        alert('Aguarde pelo menos 1 jogador entrar na partida!');
-        return;
-      }
-      
-      const jogadoresAtivos = Object.entries(jogadores).filter(([id, j]) => j.ativo);
-      
-      if (jogadoresAtivos.length < 1) {
-        alert('Aguarde pelo menos 1 jogador entrar na partida!');
-        return;
-      }
-      
-      // Definir ordem dos jogadores
-      jogadoresAtivos.forEach(([id, j], idx) => {
-        database.ref(`jogadores/${id}/ordem`).set(idx);
-      });
-      
-      // Iniciar partida
-      const primeiroJogador = jogadoresAtivos[0][0];
-      
-      await database.ref(`partidas/${partidaId}`).update({
-        jogando: true,
-        vezDoJogador: primeiroJogador
-      });
-      
-      // Iniciar timer
-      await database.ref(`jogada_atual/${partidaId}`).set({
-        jogadorId: primeiroJogador,
-        cartasViradas: [],
-        inicioJogada: Date.now()
-      });
-      
-      // Abrir tela do jogo
-      abrirJogo(partidaId);
-    }
-
-    function abrirJogo(partidaId) {
-      partidaAtualId = partidaId;
-      mostrarTela('tela-jogo');
-      carregarJogo(partidaId);
-    }
-
-    // ==========================================
-    // CARREGAR JOGO
-    // ==========================================
-    function carregarJogo(partidaId) {
-      // Limpar listeners anteriores
-      unsubscribers.forEach(unsub => unsub());
-      unsubscribers = [];
-      
-      // Listener da partida
-      const partidaRef = database.ref(`partidas/${partidaId}`);
-      partidaRef.on('value', (snap) => {
-        const partida = snap.val();
-        if (!partida) return;
-        
-        document.getElementById('jogo-titulo').textContent = `🎴 ${partida.nome}`;
-        document.getElementById('stat-total').textContent = partida.totalPares;
-        document.getElementById('stat-encontrados').textContent = partida.paresEncontrados || 0;
-        document.getElementById('stat-faltam').textContent = partida.totalPares - (partida.paresEncontrados || 0);
-        document.getElementById('stat-jogadas').textContent = partida.totalJogadas || 0;
-        
-        if (partida.finalizada) {
-          mostrarFimDeJogo(partidaId);
-        }
-        
-        atualizarVezAtual(partida.vezDoJogador);
-      });
-      unsubscribers.push(() => partidaRef.off());
-      
-      // Listener do tabuleiro
-      const tabuleiroRef = database.ref(`tabuleiro/${partidaId}`);
-      tabuleiroRef.on('value', (snap) => {
-        const tabuleiro = snap.val();
-        if (tabuleiro) {
-          renderizarTabuleiro(tabuleiro, partidaId);
-        }
-      });
-      unsubscribers.push(() => tabuleiroRef.off());
-      
-      // Listener da jogada atual
-      const jogadaRef = database.ref(`jogada_atual/${partidaId}`);
-      jogadaRef.on('value', (snap) => {
-        const jogada = snap.val();
-        if (jogada) {
-          atualizarCartasViradas(jogada.cartasViradas || []);
-          atualizarTimer(jogada);
-        }
-      });
-      unsubscribers.push(() => jogadaRef.off());
-      
-      // Listener dos jogadores (ranking)
-      const jogadoresRef = database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId);
-      jogadoresRef.on('value', (snap) => {
-        const jogadores = snap.val();
-        if (jogadores) {
-          atualizarRanking(jogadores);
-        }
-      });
-      unsubscribers.push(() => jogadoresRef.off());
-      
-      // Listener da última jogada
-      const ultimaRef = database.ref(`ultima_jogada/${partidaId}`);
-      ultimaRef.on('value', (snap) => {
-        const ultima = snap.val();
-        if (ultima) {
-          mostrarUltimaJogada(ultima);
-        }
-      });
-      unsubscribers.push(() => ultimaRef.off());
-    }
-
-    async function renderizarTabuleiro(tabuleiro, partidaId) {
-      const container = document.getElementById('tabuleiro');
-      const partidaSnap = await database.ref(`partidas/${partidaId}`).once('value');
-      const partida = partidaSnap.val();
-      
-      container.className = `tabuleiro ${partida.nivel}`;
-      container.innerHTML = '';
-      
-      tabuleiro.posicoes.forEach((cartaId, idx) => {
-        const carta = tabuleiro.cartas[cartaId];
-        const div = document.createElement('div');
-        div.className = 'carta';
-        div.dataset.posicao = idx;
-        div.dataset.cartaId = cartaId;
-        
-        if (carta.encontrada) {
-          div.classList.add('encontrada');
-        }
-        
-        div.innerHTML = `
-          <div class="carta-inner">
-            <div class="carta-verso"></div>
-            <div class="carta-frente">
-              <img src="${carta.fotoUrl}" alt="Carta">
-            </div>
-          </div>
-        `;
-        
-        container.appendChild(div);
-      });
-    }
-
-    function atualizarCartasViradas(posicoes) {
-      document.querySelectorAll('.carta').forEach((carta, idx) => {
-        if (posicoes.includes(idx)) {
-          carta.classList.add('virada');
-        } else if (!carta.classList.contains('encontrada')) {
-          carta.classList.remove('virada');
-        }
-      });
-    }
-
-    async function atualizarVezAtual(jogadorId) {
-      const container = document.getElementById('vez-container');
-      
-      if (!jogadorId) {
-        container.innerHTML = `
-          <div class="aguardando">
-            <div class="loader"></div>
-            <div class="aguardando-texto">Aguardando início...</div>
-          </div>
-        `;
-        return;
-      }
-      
-      const jogadorSnap = await database.ref(`jogadores/${jogadorId}`).once('value');
-      const jogador = jogadorSnap.val();
-      
-      if (!jogador) return;
-      
-      container.innerHTML = `
-        <div class="vez-jogador">
-          <img src="${jogador.foto || gerarAvatarPadrao(jogador.nome)}" class="vez-foto" alt="${jogador.nome}">
-          <div class="vez-nome">${jogador.nome}</div>
-          <div class="vez-timer" id="vez-timer">--</div>
-        </div>
-      `;
-    }
-
-    let timerInterval = null;
-
-    function atualizarTimer(jogada) {
-      if (timerInterval) clearInterval(timerInterval);
-      
-      const timerEl = document.getElementById('vez-timer');
-      if (!timerEl) return;
-      
-      database.ref(`partidas/${partidaAtualId}/tempoPorJogada`).once('value').then(snap => {
-        const tempoPorJogada = snap.val() || 10;
-        
-        const calcularTempo = () => {
-          const agora = Date.now();
-          const passado = Math.floor((agora - jogada.inicioJogada) / 1000);
-          const restante = Math.max(0, tempoPorJogada - passado);
-          
-          timerEl.textContent = `${restante}s`;
-          timerEl.classList.toggle('baixo', restante <= 3);
-          
-          return restante;
-        };
-        
-        calcularTempo();
-        
-        timerInterval = setInterval(() => {
-          const restante = calcularTempo();
-          if (restante <= 0) {
-            clearInterval(timerInterval);
-          }
-        }, 1000);
-      });
-    }
-
-    function atualizarRanking(jogadores) {
-      const container = document.getElementById('ranking-lista');
-      
-      const jogadoresArray = Object.entries(jogadores)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
-      
-      container.innerHTML = jogadoresArray.map((j, idx) => `
-        <div class="ranking-item">
-          <div class="ranking-posicao">${idx + 1}º</div>
-          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-foto" alt="${j.nome}">
-          <div class="ranking-info">
-            <div class="ranking-nome">${j.nome}</div>
-            <div class="ranking-pares">
-              ${'⭐'.repeat(j.pares || 0) || '-'}
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function mostrarUltimaJogada(ultima) {
-      const container = document.getElementById('ultima-jogada');
-      
-      // Buscar nome do jogador
-      let nomeJogador = 'Jogador';
-      try {
-        const jogadorSnap = await database.ref('jogadores/' + ultima.jogador).once('value');
-        const jogador = jogadorSnap.val();
-        if (jogador) {
-          nomeJogador = jogador.nome;
-        }
-      } catch (e) {
-        console.error('Erro ao buscar jogador:', e);
-      }
-      
-      container.className = 'ultima-jogada ' + ultima.tipo;
-      container.innerHTML = ultima.tipo === 'acerto' 
-        ? '✅ ' + nomeJogador + ' acertou! +1 par'
-        : '❌ ' + nomeJogador + ' errou!';
-      
-      // Animação nas cartas
-      if (ultima.posicoes && ultima.posicoes.length === 2) {
-        const cartas = document.querySelectorAll('.carta');
-        ultima.posicoes.forEach(pos => {
-          if (cartas[pos]) {
-            cartas[pos].classList.add(ultima.tipo === 'acerto' ? 'acertou' : 'errou');
-            setTimeout(() => {
-              cartas[pos].classList.remove('acertou', 'errou');
-            }, 600);
-          }
-        });
-        
-        // Confetes se acertou
-        if (ultima.tipo === 'acerto') {
-          mostrarConfetes();
-        }
-      }
-    }
-
-    // ==========================================
-    // FIM DE JOGO
-    // ==========================================
-    async function mostrarFimDeJogo(partidaId) {
-      mostrarTela('tela-fim');
-      
-      // Buscar jogadores
-      const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).once('value');
-      const jogadores = jogadoresSnap.val();
-      
-      const ranking = Object.entries(jogadores)
-        .filter(([id, j]) => j.ativo)
-        .map(([id, j]) => ({ id, ...j }))
-        .sort((a, b) => (b.pares || 0) - (a.pares || 0));
-      
-      // Pódio
-      const podio = document.getElementById('podio-container');
-      podio.innerHTML = '';
-      
-      const top3 = ranking.slice(0, 3);
-      const posicoes = ['🥈', '🥇', '🥉'];
-      const ordem = [1, 0, 2]; // 2º, 1º, 3º
-      
-      ordem.forEach(i => {
-        if (top3[i]) {
-          const j = top3[i];
-          const lugar = document.createElement('div');
-          lugar.className = 'podio-lugar';
-          lugar.innerHTML = `
-            ${i === 0 ? '<div class="coroa">👑</div>' : ''}
-            <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="podio-foto" alt="${j.nome}">
-            <div class="podio-nome">${j.nome}</div>
-            <div class="podio-pares">${j.pares || 0} pares</div>
-            <div class="podio-base">${i + 1}</div>
-          `;
-          podio.appendChild(lugar);
-        }
-      });
-      
-      // Ranking completo
-      const rankingContainer = document.getElementById('ranking-final-lista');
-      rankingContainer.innerHTML = ranking.map((j, idx) => `
-        <div class="ranking-final-item">
-          <div class="ranking-final-pos">${['🥇', '🥈', '🥉'][idx] || `${idx + 1}º`}</div>
-          <img src="${j.foto || gerarAvatarPadrao(j.nome)}" class="ranking-final-foto" alt="${j.nome}">
-          <div class="ranking-final-nome">${j.nome}</div>
-          <div class="ranking-final-pares">${j.pares || 0} pares</div>
-        </div>
-      `).join('');
-      
-      // Confetes!
-      mostrarConfetes();
-      setTimeout(mostrarConfetes, 500);
-      setTimeout(mostrarConfetes, 1000);
-    }
-
-    // ==========================================
-    // CONFETES
-    // ==========================================
-    function mostrarConfetes() {
-      const container = document.createElement('div');
-      container.className = 'confetti-container';
-      document.body.appendChild(container);
-      
-      const cores = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#ffd700'];
-      
-      for (let i = 0; i < 50; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.background = cores[Math.floor(Math.random() * cores.length)];
-        piece.style.animationDelay = Math.random() * 0.5 + 's';
-        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-        piece.style.width = (5 + Math.random() * 10) + 'px';
-        piece.style.height = (5 + Math.random() * 10) + 'px';
-        container.appendChild(piece);
-      }
-      
-      setTimeout(() => container.remove(), 4000);
-    }
-
-    // ==========================================
-    // AÇÕES
-    // ==========================================
-    async function encerrarPartida(partidaId) {
-      if (!confirm('Tem certeza que deseja encerrar esta partida?')) return;
-      
-      await database.ref(`partidas/${partidaId}`).update({ ativa: false });
-      await database.ref(`tabuleiro/${partidaId}`).remove();
-      await database.ref(`jogada_atual/${partidaId}`).remove();
-      await database.ref(`ultima_jogada/${partidaId}`).remove();
-      
-      // Remover jogadores
-      const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaId).once('value');
-      const jogadores = jogadoresSnap.val();
-      if (jogadores) {
-        for (const id of Object.keys(jogadores)) {
-          await database.ref(`jogadores/${id}`).remove();
-        }
-      }
-    }
-
-    function encerrarPartidaAtual() {
-      if (partidaAtualId) {
-        encerrarPartida(partidaAtualId);
-        voltarConfig();
-      }
-    }
-
-    function voltarConfig() {
-      unsubscribers.forEach(unsub => unsub());
-      unsubscribers = [];
-      if (timerInterval) clearInterval(timerInterval);
-      partidaAtualId = null;
-      mostrarTela('tela-config');
-    }
-
-    async function jogarNovamente() {
-      if (!partidaAtualId) return;
-      
-      // Buscar partida
-      const partidaSnap = await database.ref(`partidas/${partidaAtualId}`).once('value');
-      const partida = partidaSnap.val();
-      
-      if (!partida) return;
-      
-      // Recriar tabuleiro
-      const tabuleiro = criarTabuleiro(partida.fotos, partida.nivel);
-      
-      // Buscar jogadores e resetar pontuação
-      const jogadoresSnap = await database.ref('jogadores').orderByChild('partidaId').equalTo(partidaAtualId).once('value');
-      const jogadores = jogadoresSnap.val();
-      
-      const jogadoresIds = jogadores ? Object.keys(jogadores).filter(id => jogadores[id].ativo) : [];
-      
-      for (const id of jogadoresIds) {
-        await database.ref(`jogadores/${id}/pares`).set(0);
-      }
-      
-      // Resetar partida
-      const primeiroJogador = jogadoresIds[0] || null;
-      
-      await database.ref(`partidas/${partidaAtualId}`).update({
-        jogando: true,
-        vezDoJogador: primeiroJogador,
-        paresEncontrados: 0,
-        totalJogadas: 0,
-        finalizada: false,
-        vencedor: null
-      });
-      
-      await database.ref(`tabuleiro/${partidaAtualId}`).set(tabuleiro);
-      
-      await database.ref(`jogada_atual/${partidaAtualId}`).set({
-        jogadorId: primeiroJogador,
-        cartasViradas: [],
-        inicioJogada: Date.now()
-      });
-      
-      await database.ref(`ultima_jogada/${partidaAtualId}`).remove();
-      
-      // Voltar para tela do jogo
-      mostrarTela('tela-jogo');
-      carregarJogo(partidaAtualId);
-    }
-
-    function novaPartida() {
-      partidaAtualId = null;
-      voltarConfig();
-    }
-
-    async function resetarTudo() {
-      if (!confirm('Isso vai remover TODAS as partidas e jogadores. Tem certeza?')) return;
-      
-      await database.ref('partidas').remove();
-      await database.ref('jogadores').remove();
-      await database.ref('tabuleiro').remove();
-      await database.ref('jogada_atual').remove();
-      await database.ref('ultima_jogada').remove();
-      
-      alert('Tudo foi resetado!');
-      voltarConfig();
-    }
-
-    // ==========================================
-    // NAVEGAÇÃO
-    // ==========================================
-    function mostrarTela(telaId) {
-      document.querySelectorAll('.tela').forEach(tela => {
-        tela.classList.remove('ativa');
-      });
-      document.getElementById(telaId).classList.add('ativa');
-    }
-
-    // ==========================================
-    // INICIALIZAÇÃO
-    // ==========================================
-    carregarPartidas();
-  </script>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="banner-erro">Ative o JavaScript para usar o jogo.</p></noscript>
+  <script src="comum.js?v=20261018b"></script>
+  <script src="operador.js?v=20261018b"></script>
 </body>
 </html>
